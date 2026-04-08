@@ -6,7 +6,6 @@ import sozoLogoPath from "@assets/b39mHJlikfR8JFHpA-UOgc_1775664457835.png";
 
 const navLinks = [
   { label: "Shop Now", href: "/products" },
-  { label: "About", href: "/about" },
   { label: "About Us", href: "/difference" },
   { label: "Locations", href: "/locations" },
   { label: "HighMiles", href: "/highmiles" },
