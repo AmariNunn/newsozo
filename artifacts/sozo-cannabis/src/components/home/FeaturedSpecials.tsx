@@ -160,13 +160,25 @@ function MobileCarousel({ inView }: { inView: boolean }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
   const isPausedRef = useRef(false);
+  const isPointerDownRef = useRef(false);
   const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const stopAutoScroll = useCallback(() => {
+    if (rafRef.current !== null) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
+  }, []);
+
   const startAutoScroll = useCallback(() => {
-    if (!scrollRef.current) return;
+    // Enforce single-loop invariant — stop any existing loop first
+    stopAutoScroll();
+    if (!scrollRef.current || isPausedRef.current) return;
     const el = scrollRef.current;
 
     function step() {
+      // Cancel before re-requesting for deterministic stoppability
+      rafRef.current = null;
       if (!el || isPausedRef.current) return;
 
       el.scrollLeft += 0.7;
@@ -181,24 +193,25 @@ function MobileCarousel({ inView }: { inView: boolean }) {
     }
 
     rafRef.current = requestAnimationFrame(step);
-  }, []);
-
-  const stopAutoScroll = useCallback(() => {
-    if (rafRef.current !== null) {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = null;
-    }
-  }, []);
+  }, [stopAutoScroll]);
 
   const handleInteractionStart = useCallback(() => {
+    isPointerDownRef.current = true;
     isPausedRef.current = true;
     stopAutoScroll();
-    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    if (resumeTimerRef.current) {
+      clearTimeout(resumeTimerRef.current);
+      resumeTimerRef.current = null;
+    }
   }, [stopAutoScroll]);
 
   const handleInteractionEnd = useCallback(() => {
+    // Only schedule resume if the user actually initiated a drag (pointer was down)
+    if (!isPointerDownRef.current) return;
+    isPointerDownRef.current = false;
     if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
     resumeTimerRef.current = setTimeout(() => {
+      resumeTimerRef.current = null;
       isPausedRef.current = false;
       startAutoScroll();
     }, 1200);
@@ -206,10 +219,14 @@ function MobileCarousel({ inView }: { inView: boolean }) {
 
   useEffect(() => {
     if (!inView) return;
+    isPausedRef.current = false;
     startAutoScroll();
     return () => {
       stopAutoScroll();
-      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+      if (resumeTimerRef.current) {
+        clearTimeout(resumeTimerRef.current);
+        resumeTimerRef.current = null;
+      }
     };
   }, [inView, startAutoScroll, stopAutoScroll]);
 
