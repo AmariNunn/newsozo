@@ -1,0 +1,80 @@
+47:06 AM: Netlify Build                                                
+11:47:06 AM: ────────────────────────────────────────────────────────────────
+11:47:06 AM: ​
+11:47:06 AM: ❯ Version
+11:47:06 AM:   @netlify/build 35.11.2
+11:47:06 AM: ​
+11:47:06 AM: ❯ Flags
+11:47:06 AM:   accountId: 67e18d0d655286055bef8bd7
+11:47:06 AM:   baseRelDir: true
+11:47:06 AM:   buildId: 69d6867c0ab14f0008ebbc07
+11:47:06 AM:   deployId: 69d6867c0ab14f0008ebbc09
+11:47:06 AM:   packagePath: artifacts/mockup-sandbox
+11:47:06 AM: ​
+11:47:06 AM: ❯ Current directory
+11:47:06 AM:   /opt/build/repo/artifacts/sozo-cannabis
+11:47:06 AM: ​
+11:47:06 AM: ❯ Config file
+11:47:06 AM:   /opt/build/repo/artifacts/sozo-cannabis/netlify.toml
+11:47:06 AM: ​
+11:47:06 AM: ❯ Context
+11:47:06 AM:   production
+11:47:06 AM: ​
+11:47:06 AM: ❯ Installing extensions
+11:47:06 AM:    - neon
+11:47:21 AM: ​
+11:47:21 AM: ❯ Loading extensions
+11:47:21 AM:    - neon
+11:47:22 AM: ​
+11:47:22 AM: build.command from netlify.toml                              
+11:47:22 AM: ────────────────────────────────────────────────────────────────
+11:47:22 AM: ​
+11:47:22 AM: $ pnpm install --frozen-lockfile && pnpm --filter @workspace/sozo-cannabis run build
+11:47:22 AM: Scope: all 9 workspace projects
+11:47:23 AM: ../.. preinstall$ sh -c 'rm -f package-lock.json yarn.lock; case "$npm_config_user_agent" in pnpm/*) ;; *) echo "Use pnpm instead" >&2; exit 1 ;; esac'
+11:47:23 AM: ../.. preinstall: Done
+11:47:23 AM: Done in 1.3s using pnpm v10.30.3
+11:47:24 AM: > @workspace/sozo-cannabis@0.0.0 build /opt/build/repo/artifacts/sozo-cannabis
+11:47:24 AM: > vite build --config vite.config.ts
+11:47:24 AM: failed to load config from /opt/build/repo/artifacts/sozo-cannabis/vite.config.ts
+11:47:24 AM: error during build:
+11:47:24 AM: Error: PORT environment variable is required but was not provided.
+11:47:24 AM:     at file:///opt/build/repo/artifacts/sozo-cannabis/node_modules/.vite-temp/vite.config.ts.timestamp-1775666844422-9acfc4d545057.mjs:10:9
+11:47:24 AM:     at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+11:47:24 AM:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+11:47:24 AM:     at async loadConfigFromBundledFile (file:///opt/build/repo/node_modules/.pnpm/vite@7.3.1_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:35909:12)
+11:47:24 AM:     at async bundleAndLoadConfigFile (file:///opt/build/repo/node_modules/.pnpm/vite@7.3.1_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:35797:17)
+11:47:24 AM:     at async loadConfigFromFile (file:///opt/build/repo/node_modules/.pnpm/vite@7.3.1_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:35764:42)
+11:47:24 AM:     at async resolveConfig (file:///opt/build/repo/node_modules/.pnpm/vite@7.3.1_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:35413:22)
+11:47:24 AM:     at async createBuilder (file:///opt/build/repo/node_modules/.pnpm/vite@7.3.1_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/chunks/config.js:33875:19)
+11:47:24 AM:     at async CAC.<anonymous> (file:///opt/build/repo/node_modules/.pnpm/vite@7.3.1_@types+node@25.3.5_jiti@2.6.1_lightningcss@1.31.1_tsx@4.21.0_yaml@2.8.2/node_modules/vite/dist/node/cli.js:629:10)
+11:47:24 AM:  ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @workspace/sozo-cannabis@0.0.0 build: `vite build --config vite.config.ts`
+11:47:24 AM: Exit status 1
+11:47:24 AM: ​
+11:47:24 AM: "build.command" failed                                       
+11:47:24 AM: ────────────────────────────────────────────────────────────────
+11:47:24 AM: ​
+11:47:24 AM:   Error message
+11:47:24 AM:   Command failed with exit code 1: pnpm install --frozen-lockfile && pnpm --filter @workspace/sozo-cannabis run build (https://ntl.fyi/exit-code-1)
+11:47:24 AM: ​
+11:47:24 AM:   Error location
+11:47:24 AM:   In build.command from netlify.toml:
+11:47:24 AM:   pnpm install --frozen-lockfile && pnpm --filter @workspace/sozo-cannabis run build
+11:47:24 AM: ​
+11:47:24 AM:   Resolved config
+11:47:24 AM:   build:
+11:47:24 AM:     base: /opt/build/repo/artifacts/sozo-cannabis
+11:47:24 AM:     command: pnpm install --frozen-lockfile && pnpm --filter
+11:47:24 AM:       @workspace/sozo-cannabis run build
+11:47:24 AM:     commandOrigin: config
+11:47:24 AM:     publish: /opt/build/repo/artifacts/sozo-cannabis/dist
+11:47:24 AM:     publishOrigin: config
+11:47:24 AM:   redirects:
+11:47:25 AM: Failed during stage 'building site': Build script returned non-zero exit code: 2 (https://ntl.fyi/exit-code-2)
+11:47:25 AM:     - from: /*
+     status: 200
+     to: /index.html
+ redirectsOrigin: config
+11:47:25 AM: Build failed due to a user error: Build script returned non-zero exit code: 2
+11:47:25 AM: Failing build: Failed to build site
+11:47:25 AM: Finished processing build request in 32.356s
