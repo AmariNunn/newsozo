@@ -306,7 +306,7 @@ export function FeaturedSpecials() {
           </div>
           <a
             href="/products"
-            className="hidden md:block text-xs tracking-[0.2em] uppercase underline underline-offset-4 transition-opacity hover:opacity-60"
+            className="block text-xs tracking-[0.2em] uppercase underline underline-offset-4 transition-opacity hover:opacity-60"
             style={{ color: "var(--text-secondary)", fontFamily: "'DM Sans', sans-serif" }}
           >
             View All Deals →
