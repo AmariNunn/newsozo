@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "wouter";
 
 const deals = [
@@ -47,26 +47,9 @@ function DealPill({ deal }: { deal: string }) {
 export function DealsTicker() {
   const repeated = [...deals, ...deals];
   const [mobilePaused, setMobilePaused] = useState(false);
-  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleTouchStart = () => {
-    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
-    setMobilePaused(true);
-  };
-
-  const handleTouchEnd = () => {
-    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
-    resumeTimerRef.current = setTimeout(() => {
-      resumeTimerRef.current = null;
-      setMobilePaused(false);
-    }, 800);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
-    };
-  }, []);
+  const handleTouchStart = () => setMobilePaused(true);
+  const handleTouchEnd = () => setMobilePaused(false);
 
   return (
     <div
