@@ -27,18 +27,14 @@ function ParticleCanvas() {
       positions[i * 3] = (Math.random() - 0.5) * 14;
       positions[i * 3 + 1] = (Math.random() - 0.5) * 8;
       positions[i * 3 + 2] = (Math.random() - 0.5) * 6;
-      velocities.push(
-        (Math.random() - 0.5) * 0.003,
-        Math.random() * 0.004 + 0.001,
-        (Math.random() - 0.5) * 0.002
-      );
+      velocities.push((Math.random() - 0.5) * 0.003, Math.random() * 0.004 + 0.001, (Math.random() - 0.5) * 0.002);
     }
 
     const geo = new THREE.BufferGeometry();
     geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 
     const mat = new THREE.PointsMaterial({
-      color: 0x52b788,
+      color: 0xc9a84c,
       size: 0.06,
       transparent: true,
       opacity: 0.5,
@@ -93,24 +89,12 @@ function ParticleCanvas() {
     };
   }, []);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      id="hero-canvas"
-      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}
-    />
-  );
+  return <canvas ref={canvasRef} id="hero-canvas" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }} />;
 }
 
 const stagger = {
-  container: {
-    hidden: {},
-    show: { transition: { staggerChildren: 0.08 } },
-  },
-  item: {
-    hidden: { opacity: 0, y: 24 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
-  },
+  container: { hidden: {}, show: { transition: { staggerChildren: 0.08 } } },
+  item: { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } } },
 };
 
 export function HeroSection() {
@@ -119,46 +103,16 @@ export function HeroSection() {
   }
 
   return (
-    <section
-      data-testid="hero-section"
-      className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden"
-      style={{ background: "var(--grad-hero)" }}
-    >
+    <section data-testid="hero-section" className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden" style={{ background: "var(--grad-hero)" }}>
       <ParticleCanvas />
+      <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(255,255,255,0.7) 0%, transparent 70%)" }} />
 
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(26,61,43,0.6) 0%, transparent 70%)",
-        }}
-      />
-
-      <motion.div
-        variants={stagger.container}
-        initial="hidden"
-        animate="show"
-        className="relative z-10 text-center max-w-[900px] px-6"
-      >
-        <motion.p
-          variants={stagger.item}
-          className="text-xs tracking-[0.35em] uppercase mb-8"
-          style={{ color: "var(--green-accent)", fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}
-          data-testid="hero-eyebrow"
-        >
+      <motion.div variants={stagger.container} initial="hidden" animate="show" className="relative z-10 text-center max-w-[900px] px-6">
+        <motion.p variants={stagger.item} className="text-xs tracking-[0.35em] uppercase mb-8" style={{ color: "var(--gold)", fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }} data-testid="hero-eyebrow">
           Michigan's Premier Cannabis &nbsp;·&nbsp; Est. 2019
         </motion.p>
 
-        <motion.h1
-          variants={stagger.item}
-          className="mb-6 leading-[1.05]"
-          style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: "clamp(52px, 8vw, 88px)",
-            color: "var(--text-inverse)",
-            fontWeight: 300,
-          }}
-          data-testid="hero-headline"
-        >
+        <motion.h1 variants={stagger.item} className="mb-6 leading-[1.05]" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(52px, 8vw, 88px)", color: "var(--text-primary)", fontWeight: 300 }} data-testid="hero-headline">
           Grown with science.
           <br />
           Crafted with care.
@@ -166,16 +120,7 @@ export function HeroSection() {
           <em>Made to bloom.</em>
         </motion.h1>
 
-        <motion.p
-          variants={stagger.item}
-          className="text-lg mb-10 max-w-xl mx-auto"
-          style={{
-            color: "var(--text-inverse-dim)",
-            fontFamily: "'DM Sans', sans-serif",
-            fontWeight: 300,
-          }}
-          data-testid="hero-subheadline"
-        >
+        <motion.p variants={stagger.item} className="text-lg mb-10 max-w-xl mx-auto" style={{ color: "var(--text-secondary)", fontFamily: "'DM Sans', sans-serif", fontWeight: 300 }} data-testid="hero-subheadline">
           40+ unique cultivars grown by us, for you.
           <br />
           Three premium Michigan locations.
@@ -183,40 +128,19 @@ export function HeroSection() {
 
         <motion.div variants={stagger.item} className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/products">
-            <button
-              data-testid="hero-cta-shop"
-              className="px-8 py-4 text-xs tracking-[0.2em] uppercase font-medium transition-all duration-300 hover:brightness-110"
-              style={{
-                background: "var(--gold)",
-                color: "var(--text-primary)",
-                fontFamily: "'DM Sans', sans-serif",
-              }}
-            >
+            <button data-testid="hero-cta-shop" className="px-8 py-4 text-xs tracking-[0.2em] uppercase font-medium transition-all duration-300 hover:brightness-110" style={{ background: "var(--gold)", color: "var(--text-primary)", fontFamily: "'DM Sans', sans-serif" }}>
               Shop This Week's Deals →
             </button>
           </Link>
           <Link href="/locations">
-            <button
-              data-testid="hero-cta-locations"
-              className="px-8 py-4 text-xs tracking-[0.2em] uppercase font-medium transition-all duration-300 hover:bg-white/10"
-              style={{
-                border: "1px solid var(--border-dark)",
-                color: "var(--text-inverse)",
-                fontFamily: "'DM Sans', sans-serif",
-              }}
-            >
+            <button data-testid="hero-cta-locations" className="px-8 py-4 text-xs tracking-[0.2em] uppercase font-medium transition-all duration-300 hover:bg-black/5" style={{ border: "1px solid var(--border-dark)", color: "var(--text-primary)", fontFamily: "'DM Sans', sans-serif" }}>
               Find a Location
             </button>
           </Link>
         </motion.div>
       </motion.div>
 
-      <button
-        data-testid="hero-scroll"
-        onClick={scrollDown}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 hover:opacity-80 transition-opacity"
-        style={{ color: "var(--text-inverse)" }}
-      >
+      <button data-testid="hero-scroll" onClick={scrollDown} className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 hover:opacity-80 transition-opacity" style={{ color: "var(--text-primary)" }}>
         <span className="text-xs tracking-[0.2em] uppercase" style={{ fontFamily: "'DM Sans', sans-serif" }}>Scroll</span>
         <motion.div animate={{ y: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
           <ChevronDown size={18} />

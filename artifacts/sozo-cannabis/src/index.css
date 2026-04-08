@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Serif+Display:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Serif+Display:ital@0;1&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -74,39 +74,38 @@
   --elevate-1: rgba(0,0,0, .03);
   --elevate-2: rgba(0,0,0, .08);
 
-  /* Sozo Cannabis Light Mode Palette */
-  --background: 40 33% 95%;       /* --bg-parchment #f5f0e8 */
-  --foreground: 60 5% 10%;        /* --text-primary #1a1a17 */
+  --background: 40 33% 98%;
+  --foreground: 60 5% 10%;
   --border: 60 5% 85%;
-  --card: 40 30% 98%;             /* warm white */
+  --card: 40 30% 99%;
   --card-foreground: 60 5% 10%;
   --card-border: 43 39% 70%;
-  --sidebar: 153 43% 9%;          /* --bg-forest */
-  --sidebar-foreground: 40 33% 95%;
-  --sidebar-border: 40 33% 25%;
-  --sidebar-primary: 40 57% 54%;  /* gold */
+  --sidebar: 40 57% 54%;
+  --sidebar-foreground: 60 5% 10%;
+  --sidebar-border: 40 57% 40%;
+  --sidebar-primary: 40 57% 54%;
   --sidebar-primary-foreground: 60 5% 10%;
-  --sidebar-accent: 153 43% 25%;
-  --sidebar-accent-foreground: 40 33% 95%;
+  --sidebar-accent: 40 57% 70%;
+  --sidebar-accent-foreground: 60 5% 10%;
   --sidebar-ring: 40 57% 54%;
-  --popover: 40 30% 98%;
+  --popover: 40 30% 99%;
   --popover-foreground: 60 5% 10%;
   --popover-border: 60 5% 85%;
-  --primary: 40 57% 54%;          /* --gold #c9a84c */
+  --primary: 40 57% 54%;
   --primary-foreground: 60 5% 10%;
-  --secondary: 153 43% 15%;       /* forest green */
-  --secondary-foreground: 40 33% 95%;
-  --muted: 40 20% 90%;
+  --secondary: 40 57% 54%;
+  --secondary-foreground: 60 5% 10%;
+  --muted: 40 30% 94%;
   --muted-foreground: 60 5% 40%;
-  --accent: 152 45% 52%;          /* --green-accent #52b788 */
+  --accent: 40 57% 54%;
   --accent-foreground: 60 5% 10%;
   --destructive: 0 72% 51%;
   --destructive-foreground: 0 0% 100%;
   --input: 60 5% 80%;
   --ring: 40 57% 54%;
   --chart-1: 40 57% 54%;
-  --chart-2: 152 45% 52%;
-  --chart-3: 153 43% 25%;
+  --chart-2: 40 57% 54%;
+  --chart-3: 40 48% 45%;
   --chart-4: 40 33% 65%;
   --chart-5: 60 5% 40%;
 
@@ -142,55 +141,11 @@
 }
 
 .dark {
-  --button-outline: rgba(255,255,255, .10);
-  --badge-outline: rgba(255,255,255, .05);
-  --opaque-button-border-intensity: 9;
-  --elevate-1: rgba(255,255,255, .04);
-  --elevate-2: rgba(255,255,255, .09);
-
-  --background: 153 43% 8%;
-  --foreground: 40 33% 95%;
-  --border: 153 30% 20%;
-  --card: 153 43% 12%;
-  --card-foreground: 40 33% 95%;
-  --card-border: 153 30% 22%;
-  --sidebar: 153 43% 6%;
-  --sidebar-foreground: 40 33% 95%;
-  --sidebar-border: 153 30% 18%;
-  --sidebar-primary: 40 57% 54%;
-  --sidebar-primary-foreground: 60 5% 10%;
-  --sidebar-accent: 153 43% 20%;
-  --sidebar-accent-foreground: 40 33% 95%;
-  --sidebar-ring: 40 57% 54%;
-  --popover: 153 43% 10%;
-  --popover-foreground: 40 33% 95%;
-  --popover-border: 153 30% 20%;
-  --primary: 40 57% 54%;
-  --primary-foreground: 60 5% 10%;
-  --secondary: 153 43% 20%;
-  --secondary-foreground: 40 33% 95%;
-  --muted: 153 30% 18%;
-  --muted-foreground: 40 20% 65%;
-  --accent: 152 45% 52%;
-  --accent-foreground: 60 5% 10%;
-  --destructive: 0 72% 51%;
-  --destructive-foreground: 0 0% 100%;
-  --input: 153 30% 25%;
-  --ring: 40 57% 54%;
-  --chart-1: 40 57% 54%;
-  --chart-2: 152 45% 52%;
-  --chart-3: 153 43% 35%;
-  --chart-4: 40 33% 65%;
-  --chart-5: 60 5% 60%;
-
-  --shadow-2xs: 0px 2px 0px 0px rgba(0,0,0,0.20);
-  --shadow-xs: 0px 2px 4px 0px rgba(0,0,0,0.30);
-  --shadow-sm: 0px 2px 4px 0px rgba(0,0,0,0.35), 0px 1px 2px -1px rgba(0,0,0,0.20);
-  --shadow: 0px 4px 8px 0px rgba(0,0,0,0.40), 0px 2px 4px -1px rgba(0,0,0,0.25);
-  --shadow-md: 0px 6px 12px 0px rgba(0,0,0,0.45), 0px 2px 4px -1px rgba(0,0,0,0.30);
-  --shadow-lg: 0px 12px 24px 0px rgba(0,0,0,0.50), 0px 4px 8px -2px rgba(0,0,0,0.35);
-  --shadow-xl: 0px 20px 40px 0px rgba(0,0,0,0.55), 0px 8px 16px -4px rgba(0,0,0,0.40);
-  --shadow-2xl: 0px 32px 64px 0px rgba(0,0,0,0.65);
+  --button-outline: rgba(0,0,0, .10);
+  --badge-outline: rgba(0,0,0, .05);
+  --opaque-button-border-intensity: -8;
+  --elevate-1: rgba(0,0,0, .03);
+  --elevate-2: rgba(0,0,0, .08);
 }
 
 @layer base {
@@ -204,43 +159,40 @@
 
 /* ===== SOZO CUSTOM STYLES ===== */
 
-/* CSS Variables matching brand spec */
 :root {
-  --bg-void: #080f0b;
-  --bg-forest: #0d1f17;
-  --bg-moss: #1a3d2b;
-  --bg-sage: #2d6a4f;
-  --bg-parchment: #f5f0e8;
-  --bg-bone: #ede8df;
-  --bg-white: #fdfcf9;
+  --bg-void: #ffffff;
+  --bg-forest: #fffdf5;
+  --bg-moss: #fff8e6;
+  --bg-sage: #fff3cd;
+  --bg-parchment: #ffffff;
+  --bg-bone: #fffbe8;
+  --bg-white: #ffffff;
 
   --text-primary: #1a1a17;
   --text-secondary: #4a4a40;
   --text-muted: #8a8a78;
-  --text-inverse: #f5f0e8;
-  --text-inverse-dim: rgba(245,240,232,0.55);
+  --text-inverse: #1a1a17;
+  --text-inverse-dim: rgba(26,26,23,0.62);
 
   --gold: #c9a84c;
   --gold-light: #e8d5a3;
   --gold-dim: rgba(201,168,76,0.15);
-  --green-accent: #52b788;
-  --green-glow: rgba(82,183,136,0.12);
+  --green-accent: #c9a84c;
+  --green-glow: rgba(201,168,76,0.12);
 
   --border-light: rgba(26,26,23,0.1);
-  --border-dark: rgba(245,240,232,0.1);
-  --border-gold: rgba(201,168,76,0.3);
+  --border-dark: rgba(26,26,23,0.12);
+  --border-gold: rgba(201,168,76,0.55);
 
-  --grad-hero: linear-gradient(165deg, #080f0b 0%, #1a3d2b 60%, #0d2b1a 100%);
-  --grad-card: linear-gradient(180deg, rgba(8,15,11,0) 0%, rgba(8,15,11,0.85) 100%);
-  --grad-gold: linear-gradient(135deg, #c9a84c 0%, #e8d5a3 50%, #c9a84c 100%);
+  --grad-hero: linear-gradient(165deg, #ffffff 0%, #fff9e6 60%, #fff2cc 100%);
+  --grad-card: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(201,168,76,0.35) 100%);
+  --grad-gold: linear-gradient(135deg, #c9a84c 0%, #fff1b8 50%, #c9a84c 100%);
 }
 
-/* Font families */
 .font-display { font-family: 'Cormorant Garamond', Georgia, serif; }
 .font-serif-display { font-family: 'DM Serif Display', Georgia, serif; }
 .font-body { font-family: 'DM Sans', sans-serif; }
 
-/* Scroll animations */
 .animate-in-view {
   opacity: 0;
   transform: translateY(24px);
@@ -251,7 +203,6 @@
   transform: translateY(0);
 }
 
-/* Custom cursor */
 .custom-cursor {
   width: 32px;
   height: 32px;
@@ -269,7 +220,6 @@
   height: 48px;
 }
 
-/* Ticker animation */
 @keyframes ticker {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
@@ -281,7 +231,6 @@
 }
 .ticker-track:hover { animation-play-state: paused; }
 
-/* Card hover lift */
 .card-lift {
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
 }
@@ -290,7 +239,6 @@
   box-shadow: 0 20px 48px rgba(0,0,0,0.25);
 }
 
-/* Image hover scale */
 .img-hover img {
   transition: transform 0.5s ease;
 }
@@ -298,7 +246,6 @@
   transform: scale(1.04);
 }
 
-/* Gold gradient text */
 .text-gold-gradient {
   background: var(--grad-gold);
   -webkit-background-clip: text;
@@ -306,13 +253,11 @@
   background-clip: text;
 }
 
-/* Vine botanical decoration */
 @keyframes vine-grow {
   from { stroke-dashoffset: 400; opacity: 0; }
   to { stroke-dashoffset: 0; opacity: 0.15; }
 }
 
-/* Age gate overlay */
 .age-gate-vine {
   position: absolute;
   bottom: 0;
@@ -320,13 +265,11 @@
   pointer-events: none;
 }
 
-/* Nav transition */
 .nav-scrolled {
-  background: rgba(13,31,23,0.92) !important;
+  background: rgba(255,255,255,0.92) !important;
   backdrop-filter: blur(20px) !important;
 }
 
-/* Pulse badge */
 @keyframes pulse-green {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
@@ -335,14 +278,12 @@
   animation: pulse-green 2s ease-in-out infinite;
 }
 
-/* Stagger delays */
 .stagger-1 { transition-delay: 0ms; }
 .stagger-2 { transition-delay: 80ms; }
 .stagger-3 { transition-delay: 160ms; }
 .stagger-4 { transition-delay: 240ms; }
 .stagger-5 { transition-delay: 320ms; }
 
-/* Slide up hover overlay */
 .slide-up-overlay {
   transform: translateY(100%);
   transition: transform 0.3s ease;
@@ -351,14 +292,12 @@
   transform: translateY(0);
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-forest); }
+::-webkit-scrollbar-track { background: var(--bg-bone); }
 ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
 
-/* Foil card effect */
 .foil-card {
-  background: linear-gradient(135deg, #1a1a17 0%, #2d2d28 40%, #1a1a17 100%);
+  background: linear-gradient(135deg, #fffef7 0%, #fff3cd 40%, #fffef7 100%);
   position: relative;
   overflow: hidden;
 }
@@ -373,7 +312,6 @@
   transform: translateX(100%);
 }
 
-/* Three.js canvas */
 #hero-canvas {
   position: absolute;
   inset: 0;
