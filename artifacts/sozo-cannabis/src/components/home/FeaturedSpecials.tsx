@@ -158,53 +158,70 @@ function DealCard({ deal, className = "" }: { deal: typeof deals[0]; className?:
 
 function MobileCarousel() {
   const [paused, setPaused] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
+  const touchStartX = useRef(0);
   const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const loopedDeals = [...deals, ...deals];
 
-  const handleTouchStart = () => {
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
     if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
     setPaused(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setDragOffset(e.touches[0].clientX - touchStartX.current);
   };
 
   const handleTouchEnd = () => {
     if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
     resumeTimerRef.current = setTimeout(() => {
       resumeTimerRef.current = null;
+      setDragOffset(0);
       setPaused(false);
     }, 1200);
   };
 
-  useEffect(() => {
-    return () => {
-      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
-    };
+  useEffect(() => () => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
   }, []);
 
   return (
     <div
       className="md:hidden overflow-hidden -mx-6"
       onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchEnd}
     >
+      {/* Drag layer — shifts content when user swipes; snaps back on release */}
       <div
-        className="flex gap-3 py-4 pl-6"
         style={{
-          width: "max-content",
-          animation: "ticker 25s linear infinite",
-          animationPlayState: paused ? "paused" : "running",
-          willChange: "transform",
+          transform: `translateX(${dragOffset}px)`,
+          transition: dragOffset === 0 ? "transform 0.4s ease" : "none",
         }}
       >
-        {loopedDeals.map((deal, i) => (
-          <div
-            key={`${deal.id}-${i}`}
-            className="flex-shrink-0"
-            style={{ width: "68vw", height: 360 }}
-          >
-            <DealCard deal={deal} className="h-full" />
-          </div>
-        ))}
+        {/* CSS animation layer — seamless loop via translateX(-50%) */}
+        {/* Each card has marginRight 12px so 12 cards × (68vw + 12px) = exact half split */}
+        <div
+          className="flex py-4"
+          style={{
+            width: "max-content",
+            animation: "ticker 25s linear infinite",
+            animationPlayState: paused ? "paused" : "running",
+            willChange: "transform",
+          }}
+        >
+          {loopedDeals.map((deal, i) => (
+            <div
+              key={`${deal.id}-${i}`}
+              className="flex-shrink-0"
+              style={{ width: "68vw", height: 360, marginRight: 12 }}
+            >
+              <DealCard deal={deal} className="h-full" />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
