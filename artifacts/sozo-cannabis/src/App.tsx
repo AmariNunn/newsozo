@@ -1,4 +1,4 @@
-import { Switch, Route, Router as WouterRouter } from "wouter";
+import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AgeGate } from "@/components/AgeGate";
@@ -11,9 +11,23 @@ import HighMiles from "@/pages/HighMiles";
 import Products from "@/pages/Products";
 import About from "@/pages/About";
 import NotFound from "@/pages/not-found";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const queryClient = new QueryClient();
+
+function ScrollToTop() {
+  const [location] = useLocation();
+  const prevLocation = useRef(location);
+
+  useEffect(() => {
+    if (prevLocation.current !== location) {
+      prevLocation.current = location;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [location]);
+
+  return null;
+}
 
 function AppContent() {
   const [ageVerified, setAgeVerified] = useState(() => {
@@ -26,18 +40,13 @@ function AppContent() {
     }
   }, [ageVerified]);
 
-  useEffect(() => {
-    const handleScrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
-    document.addEventListener("sozo-scroll-top", handleScrollToTop);
-    return () => document.removeEventListener("sozo-scroll-top", handleScrollToTop);
-  }, []);
-
   if (!ageVerified) {
     return <AgeGate onVerify={() => setAgeVerified(true)} />;
   }
 
   return (
     <>
+      <ScrollToTop />
       <CustomCursor />
       <Navigation />
       <main>

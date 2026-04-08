@@ -19,7 +19,6 @@ function ParticleCanvas() {
     const camera = new THREE.PerspectiveCamera(60, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
     camera.position.z = 5;
 
-    // Create floating particles
     const count = 200;
     const positions = new Float32Array(count * 3);
     const velocities: number[] = [];
@@ -66,7 +65,6 @@ function ParticleCanvas() {
         pos[i * 3 + 1] += velocities[i * 3 + 1];
         pos[i * 3 + 2] += velocities[i * 3 + 2];
 
-        // Wrap around
         if (pos[i * 3 + 1] > 5) pos[i * 3 + 1] = -5;
         if (pos[i * 3] > 8) pos[i * 3] = -8;
         if (pos[i * 3] < -8) pos[i * 3] = 8;
@@ -128,7 +126,6 @@ export function HeroSection() {
     >
       <ParticleCanvas />
 
-      {/* Radial overlay */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -136,14 +133,12 @@ export function HeroSection() {
         }}
       />
 
-      {/* Content */}
       <motion.div
         variants={stagger.container}
         initial="hidden"
         animate="show"
         className="relative z-10 text-center max-w-[900px] px-6"
       >
-        {/* Eyebrow */}
         <motion.p
           variants={stagger.item}
           className="text-xs tracking-[0.35em] uppercase mb-8"
@@ -153,7 +148,6 @@ export function HeroSection() {
           Michigan's Premier Cannabis &nbsp;·&nbsp; Est. 2019
         </motion.p>
 
-        {/* Headline */}
         <motion.h1
           variants={stagger.item}
           className="mb-6 leading-[1.05]"
@@ -172,7 +166,6 @@ export function HeroSection() {
           <em>Made to bloom.</em>
         </motion.h1>
 
-        {/* Sub */}
         <motion.p
           variants={stagger.item}
           className="text-lg mb-10 max-w-xl mx-auto"
@@ -188,7 +181,6 @@ export function HeroSection() {
           Three premium Michigan locations.
         </motion.p>
 
-        {/* CTAs */}
         <motion.div variants={stagger.item} className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/products">
             <button
@@ -219,7 +211,6 @@ export function HeroSection() {
         </motion.div>
       </motion.div>
 
-      {/* Scroll indicator */}
       <button
         data-testid="hero-scroll"
         onClick={scrollDown}
