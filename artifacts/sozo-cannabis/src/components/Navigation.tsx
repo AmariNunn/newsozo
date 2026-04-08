@@ -63,7 +63,9 @@ export function Navigation() {
                 <span
                   className="text-xs tracking-[0.2em] uppercase transition-colors duration-200 cursor-pointer"
                   style={{
-                    color: location === link.href || scrolled ? "var(--gold)" : "var(--bg-moss)",
+                    color: location === link.href ? "var(--gold)" : scrolled ? "var(--text-inverse)" : "var(--bg-moss)",
+                    textShadow: scrolled ? "0 1px 2px rgba(0,0,0,0.45)" : "none",
+                    opacity: location === link.href ? 1 : scrolled ? 0.92 : 1,
                     fontFamily: "'DM Sans', sans-serif",
                     fontWeight: 500,
                   }}
@@ -150,6 +152,7 @@ export function Navigation() {
                       style={{
                         fontFamily: "'Cormorant Garamond', serif",
                         color: "var(--text-inverse)",
+                        textShadow: "0 2px 8px rgba(0,0,0,0.45)",
                         fontWeight: 300,
                       }}
                     >
