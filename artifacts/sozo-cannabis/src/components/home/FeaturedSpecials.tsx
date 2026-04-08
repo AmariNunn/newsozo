@@ -201,9 +201,9 @@ export function FeaturedSpecials() {
           </a>
         </motion.div>
 
-        {/* Asymmetric editorial grid */}
+        {/* Desktop: asymmetric editorial grid */}
         <div
-          className="grid gap-4"
+          className="hidden md:grid gap-4"
           style={{
             gridTemplateColumns: "repeat(6, 1fr)",
             gridTemplateRows: "auto",
@@ -257,13 +257,35 @@ export function FeaturedSpecials() {
           ))}
         </div>
 
-        {/* Mobile: simple stack */}
-        <div className="md:hidden flex flex-col gap-4 mt-4">
-          {deals.map((deal) => (
-            <div key={deal.id} style={{ height: 260 }} className="card-lift">
+        {/* Mobile: horizontal snap-scroll carousel */}
+        <div
+          className="md:hidden hide-scrollbar flex gap-3 overflow-x-auto pb-4 -mx-6 px-6"
+          style={{
+            scrollSnapType: "x mandatory",
+            WebkitOverflowScrolling: "touch",
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+          }}
+        >
+          {deals.map((deal, i) => (
+            <motion.div
+              key={deal.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: i * 0.06 }}
+              className="flex-shrink-0 card-lift"
+              style={{
+                width: "72vw",
+                maxWidth: 280,
+                height: 380,
+                scrollSnapAlign: "start",
+              }}
+            >
               <DealCard deal={deal} className="h-full" />
-            </div>
+            </motion.div>
           ))}
+          {/* Trailing spacer so last card doesn't hug the edge */}
+          <div className="flex-shrink-0 w-2" />
         </div>
       </div>
     </section>

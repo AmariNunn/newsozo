@@ -356,6 +356,10 @@
 ::-webkit-scrollbar-track { background: var(--bg-forest); }
 ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
 
+/* Hide scrollbar for horizontal carousels */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+
 /* Foil card effect */
 .foil-card {
   background: linear-gradient(135deg, #1a1a17 0%, #2d2d28 40%, #1a1a17 100%);
