@@ -1,0 +1,690 @@
+# SOZO CANNABIS — MASTER WEBSITE BUILD PROMPT
+### $50K-Tier Full Site Specification · Version 1.0
+---
+
+## ROLE & MISSION
+
+You are a senior creative technologist and UI/UX director building the definitive cannabis brand website for **Sozo Cannabis** — a Michigan-based, vertically integrated cannabis company with 3 premium retail locations and their own cultivation operation. This site must look and feel like it belongs next to **Highsnobiety, Supreme, Mejuri, or Goop** — not a generic dispensary site. It should be **the most visually arresting cannabis website in the Midwest.** Every pixel, every transition, every line of copy must feel intentional, premium, and alive.
+
+**Live reference:** sozolife.com  
+**Brand essence:** Science-led cultivation. Elevated lifestyle. Michigan proud. Community rooted.  
+**Target audience:** 21–45, cannabis-curious to connoisseur, lifestyle-forward, appreciates craft over commodity.
+
+---
+
+## AESTHETIC DIRECTION — NON-NEGOTIABLE
+
+### Codename: "BOTANICAL LUXE"
+
+Think: **luxury editorial magazine meets high-end botanical brand meets Chicago architect's apartment.**
+
+- **Mood:** Darkly elegant. Organic warmth against deep forest tones. Gold accents that feel earned, not flashy.
+- **NOT:** Generic green dispensary. Not neon. Not streetwear. Not pharmaceutical.
+- **References:** Aesop's website aesthetic + Off-White's editorial grid + Kinfolk magazine's photography treatment.
+
+### Typography System
+- **Display / Hero:** `Cormorant Garamond` — elegant, high-contrast serif with Italian editorial energy. Used for all hero headlines, section titles, pull quotes.
+- **Subheadings:** `Freight Display Pro` or `DM Serif Display` — warm, readable serif for mid-level headers.
+- **Body / UI:** `Söhne` (or `Neue Haas Grotesk` fallback `DM Sans`) — Swiss grotesque with personality. Clean, modern, slightly warm.
+- **Accent / Labels:** `Neue Montreal` or `Aktiv Grotesk` — tight, uppercase, letter-spaced for eyebrows, badges, nav items.
+- **Size scale:** Display: 96px / Hero: 72px / H1: 56px / H2: 40px / H3: 28px / H4: 20px / Body: 16px / Caption: 13px / Label: 11px
+
+### Color Palette — CSS Variables
+```css
+:root {
+  /* Backgrounds */
+  --bg-void:       #080f0b;   /* Deepest dark — hero sections */
+  --bg-forest:     #0d1f17;   /* Deep forest green — nav, footer */
+  --bg-moss:       #1a3d2b;   /* Mid forest — cards on dark bg */
+  --bg-sage:       #2d6a4f;   /* Accent panels */
+  --bg-parchment:  #f5f0e8;   /* Warm off-white — primary light bg */
+  --bg-bone:       #ede8df;   /* Slightly deeper parchment — alt sections */
+  --bg-white:      #fdfcf9;   /* Pure warm white — cards on light */
+
+  /* Text */
+  --text-primary:  #1a1a17;   /* Near-black warm */
+  --text-secondary:#4a4a40;   /* Warm gray body */
+  --text-muted:    #8a8a78;   /* Captions, metadata */
+  --text-inverse:  #f5f0e8;   /* Text on dark */
+  --text-inverse-dim: rgba(245,240,232,0.55);
+
+  /* Accents */
+  --gold:          #c9a84c;   /* Primary gold — CTAs, highlights */
+  --gold-light:    #e8d5a3;   /* Light gold — text on dark */
+  --gold-dim:      rgba(201,168,76,0.15); /* Gold tints */
+  --green-accent:  #52b788;   /* Bright botanical green — active states */
+  --green-glow:    rgba(82,183,136,0.12); /* Subtle ambient green */
+
+  /* Borders */
+  --border-light:  rgba(26,26,23,0.1);
+  --border-dark:   rgba(245,240,232,0.1);
+  --border-gold:   rgba(201,168,76,0.3);
+
+  /* Gradients */
+  --grad-hero:     linear-gradient(165deg, #080f0b 0%, #1a3d2b 60%, #0d2b1a 100%);
+  --grad-card:     linear-gradient(180deg, rgba(8,15,11,0) 0%, rgba(8,15,11,0.85) 100%);
+  --grad-gold:     linear-gradient(135deg, #c9a84c 0%, #e8d5a3 50%, #c9a84c 100%);
+}
+```
+
+### Motion & Animation System
+- **Page load:** Staggered fade-up reveals with `opacity: 0 → 1` + `translateY(24px → 0)` at 60ms intervals per element
+- **Scroll animations:** `IntersectionObserver` triggers class `.in-view` — all major sections animate in from slight transforms
+- **Hover states:** Cards lift `translateY(-6px)` with box-shadow deepening over 300ms cubic-bezier(0.34, 1.56, 0.64, 1)
+- **Image hover:** Subtle 1.04 scale on product images, 500ms ease
+- **Nav:** Transparent on hero, transitions to dark solid on scroll with backdrop-blur: 20px
+- **Custom cursor:** Circular 32px cursor that scales to 48px on hover over interactive elements, shifts to crosshair on product images
+- **Page transitions:** 400ms fade with slight upward motion between pages
+- **Micro-interactions:** Button press ripple effect. Input focus ring animated width expand. Badge pulse on "Open Now."
+
+---
+
+## TECH STACK
+
+```
+Framework:       Next.js 14 (App Router)
+Styling:         Tailwind CSS + CSS Modules for complex animations
+Animations:      Framer Motion (all page/scroll transitions)
+3D Effects:      Three.js (hero particle system — floating botanical spores)
+Icons:           Lucide React
+Fonts:           Google Fonts + local fallbacks
+State:           Zustand (cart, location preference, loyalty tier)
+CMS:             Sanity.io (products, blog, weekly specials — editors update without devs)
+Menu Data:       Toast POS API → Sanity sync (nightly or live via webhook)
+Loyalty:         Alpine IQ or Springbig API integration
+Maps:            Google Maps Embed API (each location page)
+Analytics:       PostHog (privacy-first, replaces GA)
+AI:              Anthropic Claude API (strain finder + chatbot)
+Hosting:         Vercel (Edge Network, image optimization)
+Age Gate:        Cookie-based, 21+ verification modal, Lottie animation
+```
+
+---
+
+## GLOBAL COMPONENTS
+
+### 1. Age Gate Modal
+- Full-screen takeover on first visit. Dark background (`--bg-void`).
+- Center: Sozo logo in Cormorant Garamond, large.
+- Headline: *"Are you 21 or older?"* in display type.
+- Two buttons: **"Yes, Enter"** (gold fill) | **"No, Exit"** (outline)
+- Subtle animated botanical illustration behind — CSS only, vines growing from bottom corners.
+- Cookie stores consent for 30 days. If "No" → redirect to google.com.
+
+### 2. Navigation
+**Desktop:**
+- Fixed top. Starts fully transparent over hero. On scroll past 80px: `background: rgba(13,31,23,0.92)` + `backdrop-filter: blur(20px)`.
+- Left: Sozo logomark (SVG leaf icon) + wordmark in Cormorant Garamond 1.4rem, letter-spacing 4px.
+- Center: Nav links — Shop Now (dropdown) · About · Locations · Products · HighMiles
+- Right: Search icon (opens full-screen overlay search) + "SHOP NOW" pill CTA in `--gold`.
+- **Dropdown (Shop Now):** Mega-menu with product categories as visual tiles, current week's top deal featured, location selector.
+
+**Mobile:**
+- Hamburger → full-screen overlay menu. Dark bg. Links stack vertically in large Cormorant type. Location shown at bottom. Smooth slide-in from right.
+
+### 3. Footer
+- 3 rows: Brand column (logo + tagline + social links) · Nav columns · Legal/compliance row.
+- Dark forest background. Thin gold `1px` top border.
+- Newsletter signup: "Get early access to drops and deals" — email input inline.
+- Age/legal disclaimer in small muted type.
+- Bottom bar: copyright + license links + "Must be 21+" badge.
+
+### 4. Global Toast Notifications
+- Top-right sliding notifications for cart adds, loyalty point updates, deal alerts.
+- Dark pill shape with green-accent left border. 3-second auto-dismiss.
+
+---
+
+## PAGE-BY-PAGE SPECIFICATIONS
+
+---
+
+### PAGE 1: HOME (`/`)
+
+#### Section 1.1 — Cinematic Hero
+**Layout:** Full viewport height (`100vh`). Dark. Immersive.
+
+**Background:**
+- Three.js particle system: ~200 slow-floating spore-like particles in `--green-accent` at 15% opacity. Subtle drift upward. Mouse parallax (particles shift slightly toward cursor at 0.02 speed factor).
+- Radial gradient overlay: deep forest green at bottom, void black at top.
+- Optional: looping WebM background video of cannabis plant close-up at very low opacity (10%) as texture layer, muted, no controls.
+
+**Content (centered, max-width 900px):**
+```
+[Eyebrow — uppercase label, green-accent, letter-spaced]
+MICHIGAN'S PREMIER CANNABIS · EST. 2019
+
+[Hero Headline — Cormorant Garamond, 88px, white]
+Grown with science.
+Crafted with care.
+Made to bloom.
+
+[Subheadline — DM Sans 300, 18px, text-inverse-dim]
+40+ unique cultivars grown by us, for you.
+Three premium Michigan locations.
+
+[CTAs — side by side, 12px gap]
+[SHOP THIS WEEK'S DEALS →]  [FIND A LOCATION]
+(gold filled)                (outline white)
+
+[Scroll indicator — animated arrow, bottom center]
+```
+
+**Entrance animation:** Each text element fades up with 80ms stagger. Particles initialize after 600ms delay for perceived performance.
+
+#### Section 1.2 — Live Deals Ticker
+**Full-width strip.** Background: `--bg-moss`. 
+- Left label: "THIS WEEK ✦" in small caps, gold.
+- Smooth CSS `marquee` animation scrolling deal pills: `10/$25 Drag & Draw Pre-Rolls · 8/$85 Melonado Pack · 3/$45 Vape Carts · 20% OFF Pharma Jones...`
+- Deal pills: rounded, semi-transparent white on moss background. Highlighted price in gold.
+- Pause on hover.
+- Right edge: "VIEW ALL DEALS →" link.
+
+#### Section 1.3 — Featured Specials Grid
+**Layout:** Asymmetric editorial grid. NOT uniform 3-column. Use CSS Grid:
+```
+[Large card — 2 cols wide, 2 rows tall] [Tall card — 1 col, 2 rows] [Wide card — 2 cols, 1 row]
+[Small card]  [Small card]              [card]                      [card]
+```
+
+**Each Deal Card:**
+- Product photography on a textured parchment/linen background (or placeholder gradient with product emoji at correct proportions).
+- Top-left: Category badge (e.g. "PRE-ROLL" in small gold uppercase label).
+- Hover: Image subtly scales 1.04. Dark gradient overlay deepens. "SHOP NOW →" button rises from bottom with slide-up animation.
+- Price treatment: Large Cormorant display number (e.g. "10/$25") in gold, vertically center-prominent.
+- Product name below in DM Sans 14px muted.
+- Bottom-right: "Weekly Special · Ends Apr 16" micro-label.
+- Click: Opens quick-add drawer from right side with product details + location selector + add to cart.
+
+#### Section 1.4 — Brand Differentiator Strip
+**Full-width. 3 columns. Parchment bg. Thin top/bottom 1px gold border.**
+```
+Column 1: 🧬  MAXIMIZED TERPENES    Column 2: 🔬  LAB TESTED EVERY BATCH    Column 3: 🌱  100% MICHIGAN GROWN
+           Full spectrum expression            Certificate of analysis per lot          Seed to sale, all 3 stores
+```
+Thin vertical gold dividers between columns. Subtle entrance animation — each column slides in from bottom on scroll.
+
+#### Section 1.5 — HighMiles Loyalty Feature
+**Full-width. Dark (`--bg-void`) background.**
+Two-column layout (60/40):
+
+Left:
+- Eyebrow: "HIGHMILES LOYALTY ✦"
+- Headline (Cormorant, 52px): *"The dopest loyalty program in cannabis."*
+- Body: Full readable paragraph about earning points, tiers, exclusive drops.
+- Two CTAs: **"JOIN FREE"** (gold) · **"LEARN MORE"** (outline)
+- Below CTAs: 3 micro-stats inline — "1 pt per $1 · 4 tiers · Penny products"
+
+Right:
+- Animated tier card stack. Four cards fanned/stacked showing Bronze → Silver → Gold → Platinum. Cards fan out on hover/scroll into view.
+- Each card: dark card with tier name in gold, subtle foil texture CSS effect, point range shown.
+- Background glow: radial gold tint behind card stack.
+
+#### Section 1.6 — Product Category Feature
+**Full-width. Light parchment bg.**
+- Headline: *"Same flower. Different forms."*
+- Horizontal scroll rail (desktop: 5 visible, mobile: 2.5 visible, swipeable):
+  - Flower · Pre-Rolls · Vapes · Edibles · Concentrates · Drinks
+  - Each category tile: Square card, 240px. Dark bg with botanical texture. Category icon (SVG). Name. "Shop →".
+  - Active/hover: gold border, slight scale.
+
+#### Section 1.7 — Visit Us (Locations Preview)
+**3 equal-width location cards. Dark forest background.**
+
+Each card:
+- Top: Real store photography (or high-quality placeholder gradient with store name). Image fills top 55% of card.
+- Below image: Store name (Cormorant 22px), address (small DM Sans), hours (table format, days vs times), open/closed live status badge (green pulse animation if open, muted if closed).
+- Two CTAs per card: **"SHOP ONLINE"** · **"GET DIRECTIONS"**
+- Hover: card lifts, image scales slightly.
+- Live hours calculated in JS based on current day/time vs store hours object.
+
+#### Section 1.8 — Social Proof
+**Parchment bg. Centered.**
+- Headline: *"What Michigan is saying."*
+- 3–4 Google Review cards in a masonry-style staggered grid.
+- Each: Star rating (gold stars SVG), review text, reviewer name + location tag, date.
+- Below grid: "4.9 stars across 3 locations · 1,200+ reviews" stat in large Cormorant type.
+- "Leave a Review" CTA.
+
+#### Section 1.9 — AI Features Strip
+**Moss green bg. Wide feature row.**
+- Eyebrow: "POWERED BY AI"
+- 3 feature tiles side by side:
+  1. 🤖 **AI Strain Finder** — Tell us your mood, get your match. Live on Products.
+  2. 💬 **Sozo Assistant** — 24/7 chat for deals, products, loyalty questions.
+  3. 🎯 **Smart Rewards** — AI surfaces your fastest path to the next HighMiles tier.
+- Each tile: icon, title (Cormorant), short body, badge ("Live" / "Coming Soon").
+
+---
+
+### PAGE 2: PRODUCTS (`/products`)
+
+#### Section 2.1 — Products Hero
+**Full-width dark hero. 60vh.**
+- Background: macro photography of trichomes or a lush cannabis plant, overlaid with deep green gradient.
+- Left-aligned text:
+  - Eyebrow: "OUR CULTIVARS · 40+ STRAINS"
+  - Headline (Cormorant 64px): *"We all deserve to bloom."*
+  - Body: "Crafted and tested with precision. Whether expert or newcomer — grown for you."
+- Right: floating animated stat badges — "29% THC MAX · 40+ Cultivars · Lab Verified" fading in/out.
+
+#### Section 2.2 — AI Strain Finder (Featured Module)
+**Full-width module. Dark bg. Prominent placement — above the product grid.**
+
+Design:
+- Header: Gold ✦ icon + "AI STRAIN FINDER" eyebrow. Cormorant headline: *"Tell us your mood. We'll find your match."*
+- Mood selector: 8 large tap targets in a 4×2 grid. Each: rounded rectangle card, dark bg, large emoji icon (32px), mood label. Selected state: gold border + gold tint background + checkmark.
+  - Moods: 😌 Relax · 🎉 Socialize · 🎯 Focus · 😴 Sleep · 🎨 Create · 💊 Pain Relief · ⚡ Energize · 🧘 De-stress
+- Experience level toggle: "Beginner · Intermediate · Experienced" — pill toggle, gold active state.
+- "FIND MY STRAIN →" CTA button — gold, full-width on mobile.
+- **AI Response panel** (slides down): Shows recommended strain card with: strain name in Cormorant, type badge (Indica/Sativa/Hybrid), THC%, terpene profile, effect tags, and "Shop This Strain →" button.
+- **AI integration:** On submit, call Anthropic Claude API with system prompt: *"You are Sozo's cannabis expert. Given mood=[mood] and experience=[level], recommend ONE strain from this inventory: [JSON inventory]. Return: strain_name, why_it_fits (2 sentences), dominant_effects (3 tags), terpene_highlight. Be warm, knowledgeable, non-medical."*
+
+#### Section 2.3 — Category Filter Bar
+**Sticky bar. Appears below the AI module, sticks to top of viewport when scrolling product grid.**
+- Background: parchment with blur. Thin gold bottom border.
+- Pills: All · 🌿 Flower · 🚬 Pre-Rolls · 💨 Vapes · 🍬 Edibles · 🔥 Concentrates · 🥤 Drinks
+- Right side: Sort dropdown ("Popular · New · THC % · Price ↑ · Price ↓") + Filter icon (opens filter drawer).
+- **Filter Drawer** (slides from right): Checkboxes for Effect (Relaxing, Energizing, Focused, Sleepy, Creative), Type (Indica/Sativa/Hybrid), THC Range (slider), Price Range (slider), Brand.
+
+#### Section 2.4 — Product Grid
+**3 columns desktop, 2 tablet, 1 mobile. Gap: 20px.**
+
+Each Product Card:
+```
+┌─────────────────────────────────────┐
+│  [Product Image — 260px tall]        │
+│  [Category badge top-left]           │
+│  [NEW badge top-right if < 2 weeks]  │
+├─────────────────────────────────────┤
+│  Strain Name    [Indica/Sativa pill] │
+│  THC: 26%  ·  CBD: 0.2%             │
+│  Terpene: Myrcene, Caryophyllene     │
+│  Weight options: [1g] [3.5g] [7g]   │
+│                                      │
+│  $38 / 3.5g                          │
+│  [────────── ADD TO CART ──────────] │
+│  [♡ Save]            [⚡ Quick View] │
+└─────────────────────────────────────┘
+```
+
+Interactions:
+- Hover: card elevates, image scales 1.04, "QUICK VIEW" appears as overlay button centered on image.
+- Weight selector: pill buttons, selected = gold fill.
+- Add to Cart: ripple animation, cart icon in nav bounces, toast notification appears.
+- Quick View: right-side drawer opens with full product detail — large image, full description, effect tags, lab results badge, terpene wheel (SVG), reviews, related strains.
+- Heart/Save: adds to local "Saved Strains" list (Zustand), heart fills gold.
+
+#### Section 2.5 — Cultivation Story Module
+**Full-width. Alternating text/image layout. 2 rows.**
+Row 1: Left text ("From seed to shelf, we control every step..."), right: macro trichome image.
+Row 2: Left: lab/testing imagery, right: text ("Lab tested. Every batch. Every time.").
+Each row has a key stat callout in giant Cormorant display type (e.g. "40+" / "72 hrs").
+
+---
+
+### PAGE 3: LOCATIONS (`/locations`)
+
+#### Section 3.1 — Locations Hero
+**Full-width. Dark. 50vh.**
+- Centered: "FIND YOUR SOZO" in Cormorant 64px. Subtext: "Three premium Michigan dispensaries."
+- Below: Search bar — "Enter your city or zip..." with geolocation button (📍) that auto-detects and highlights nearest store.
+- Background: abstract map-like topographic line pattern in subtle green on dark.
+
+#### Section 3.2 — Interactive Map + Store List
+**Split layout: 45% list (left scroll) / 55% map (right, sticky).**
+
+Store List:
+- Each store: compact card with store name, address, live open/closed badge, today's hours, "SHOP ONLINE" + "DIRECTIONS" CTAs.
+- Clicking card: map pan + zooms to that pin + expands that card.
+- Active store: gold left border on card.
+
+Map:
+- Google Maps custom styled map (dark theme matching brand colors — apply custom JSON style map that kills default colors, uses dark forest greens).
+- Custom pins: Sozo leaf SVG markers in gold.
+- Clicking pin: info popup with mini store card (name, address, status, CTA buttons).
+
+#### Section 3.3 — Individual Store Sections
+**Below the map. One full detailed section per store.**
+
+Each store block:
+```
+[Store hero image — full width, 340px tall, slight parallax scroll effect]
+
+┌─ Store name (Cormorant 40px)    [Open Now ●] ─────────────────────────────────┐
+│  "Sozo Saginaw"                                                                 │
+│                                                                                 │
+│  📍 2617 Bay St, Saginaw, MI 48602                                             │
+│  📞 (989) 777-1234    ✉ saginaw@sozocompanies.com                              │
+│                                                                                 │
+│  HOURS                          SERVICES                                        │
+│  Mon–Sat  10am – 9pm            ✓ Recreational    ✓ Medical                   │
+│  Sunday   12pm – 6pm            ✓ Online Pre-Order ✓ In-Store Pickup          │
+│                                 ✓ HighMiles Enrollment                         │
+│                                                                                 │
+│  [SHOP SAGINAW ONLINE →]  [GET DIRECTIONS →]  [CALL STORE]                    │
+└────────────────────────────────────────────────────────────────────────────────┘
+```
+
+Below each store block: 3-4 Google review snippets from that specific location.
+
+---
+
+### PAGE 4: HIGHMILES (`/highmiles`)
+
+#### Section 4.1 — HighMiles Cinematic Hero
+**100vh. Full immersive. Background: `--bg-void`.**
+
+- Background: Slow-moving gold particle drift (CSS animation, 30 particles, `--gold` at 20% opacity, float upward and fade).
+- Large gold radial ambient glow behind center content.
+- Centered content:
+  - Sozo × HighMiles lockup logo (SVG — leaf icon + "HIGHMILES" wordmark)
+  - Headline (Cormorant 80px, white): *"Reward yourself. You deserve it."*
+  - Subhead: *"Earn points. Rise through the tiers. Unlock the dopest rewards in cannabis."*
+  - 2 CTAs: **"JOIN FREE — IT TAKES 30 SECONDS"** (gold, large) · **"VIEW MY WALLET"** (outline)
+  - Scroll: animated 4-tier card fan visible at bottom of hero teasing content below.
+
+#### Section 4.2 — How It Works
+**Light parchment bg. Centered. 3 steps.**
+
+Visual: Large step numbers (Cormorant 120px, very light gold watermark behind each). Thin connecting line between steps.
+
+```
+         ①                          ②                          ③
+   Sign Up Free              Earn Every Visit           Unlock Rewards
+  ──────────────           ──────────────────         ─────────────────
+  In-store or online.      1 pt per $1 spent.         Penny products,
+  No fee. Just your        Bonus pts on drops,        merch, free
+  name + phone.            events & birthday.         eighths & more.
+```
+
+Entrance: Steps animate in left-to-right with 150ms stagger on scroll.
+
+#### Section 4.3 — Tier Breakdown
+**Dark (`--bg-forest`) bg. Full-width.**
+
+Header: "YOUR TIER, YOUR PERKS" eyebrow + Cormorant headline.
+
+4 Tier Cards (equal width, horizontal row):
+```
+┌──── BRONZE ─────┐  ┌──── SILVER ─────┐  ┌───── GOLD ───────┐  ┌─── PLATINUM ───┐
+│ 🥉               │  │ 🥈               │  │ 🥇  [POPULAR]    │  │ 💎              │
+│ 0 – 499 pts      │  │ 500 – 1,499 pts  │  │ 1,500 – 2,999 pts│  │ 3,000+ pts     │
+│─────────────────│  │──────────────────│  │──────────────────│  │────────────────│
+│ ✓ 1 pt / $1     │  │ ✓ 1.25 pt / $1   │  │ ✓ 1.5 pt / $1   │  │ ✓ 2x pts       │
+│ ✓ Member deals  │  │ ✓ Penny products  │  │ ✓ Free 1/8       │  │ ✓ Dedicated rep│
+│ ✓ Birthday pts  │  │ ✓ Silver drops    │  │ ✓ Priority drops  │  │ ✓ Farm tours   │
+│ ✓ Early alerts  │  │ ✓ Free pre-roll   │  │ ✓ Gold merch      │  │ ✓ Annual gift  │
+│                 │  │                  │  │                  │  │ ✓ Event access │
+└─────────────────┘  └──────────────────┘  └──────────────────┘  └────────────────┘
+```
+
+Gold tier card: 2px gold border. "MOST POPULAR" badge. Slightly elevated (box-shadow). Gold background tint.
+Platinum card: Animated shimmer on the card border — `@keyframes shimmer` cycling gold/silver/white.
+On hover: each card shows a "JOIN / LEARN MORE" CTA that slides up from bottom.
+
+#### Section 4.4 — AI Points Calculator
+**Moss green bg. Max-width 700px centered card. Dark card.**
+
+Header: "✦ AI-POWERED POINTS CALCULATOR" — "How fast can you reach the next tier?"
+
+Inputs:
+- Monthly spend slider ($0 – $500, step $10) with live dollar readout
+- Current tier dropdown
+- Visit frequency (Once a week / Twice a week / Monthly / etc.)
+
+Live output panel (updates in real time as sliders move):
+```
+┌─────────────────────────────────────────────────┐
+│  Points this month:           312 pts            │
+│  Months to next tier:         ≈ 4 months         │
+│  Estimated monthly value:     $31 in rewards     │
+│  Recommended: Double up on Tuesdays (2x pts day) │  ← AI tip
+└─────────────────────────────────────────────────┘
+```
+
+"FIND MY FASTEST PATH →" button — sends to Claude API with: tier, spend, frequency → returns personalized tip on how to reach next tier fastest (e.g. "Shop on Tuesdays — Sozo offers 2x points. One Tuesday visit gets you there 3 weeks sooner.").
+
+AI response appears below in an animated text-reveal (typewriter effect, 20ms per character).
+
+#### Section 4.5 — FAQ
+**Light bg. 2-column layout: sidebar (40%) + accordion (60%).**
+
+Sidebar:
+- Cormorant headline: *"Still have questions?"*
+- Subtext paragraph.
+- Contact info block.
+- Link to full Terms.
+
+Accordion (12 questions):
+- Clean, borderless. Just question text + arrow. On open: smooth `max-height` expand with content fade-in.
+- Questions grouped into 3 categories (visual divider between groups):
+  - **Getting Started** (4 questions)
+  - **Earning & Redeeming** (5 questions)  
+  - **Your Account** (3 questions)
+- Open state: question text turns gold. Arrow rotates 180°. Border-left gold accent appears.
+
+---
+
+### PAGE 5: ABOUT (`/about`)
+
+#### Section 5.1 — About Hero
+**Split full-viewport. Left: dark forest bg with typography. Right: full-height image.**
+
+Left (55%):
+- Eyebrow: "OUR STORY · MICHIGAN GROWN"
+- Headline (Cormorant 68px): *"Grown with science. Rooted in Michigan."*
+- Two body paragraphs: Brand origin story. Science-led cultivation philosophy.
+- Inline stats: Founded 2019 · 3 Locations · 40+ Cultivars · 100% In-house
+
+Right (45%): Full-height cultivation photography, slight parallax on scroll.
+
+#### Section 5.2 — Values Grid
+**Parchment bg. 3-column card grid.**
+
+Cards:
+1. 🧬 Science First — cultivation philosophy
+2. 🌱 Michigan Proud — local/community focus  
+3. 🤝 Community Built — people and culture
+
+Each card: icon, Cormorant title, body paragraph. Hover: subtle gold left border appears.
+
+#### Section 5.3 — The Cultivation Story (Editorial Section)
+**Full-width alternating rows. Immersive. Cinematic.**
+
+Row 1 (dark bg): Left: macro plant photography. Right: "From the soil up." + paragraph on cultivation process.
+Row 2 (light bg): Left: "Lab tested. Every time." + paragraph on testing. Right: lab equipment photography.
+Row 3 (dark bg): Left: "Our people." + paragraph on team culture. Right: team photography.
+
+Each row: large decorative number (01 / 02 / 03) in faint Cormorant behind content.
+
+---
+
+## AI INTEGRATION ARCHITECTURE
+
+### 1. Sozo AI Chatbot (Claude API)
+**System Prompt:**
+```
+You are the Sozo Cannabis AI assistant — knowledgeable, warm, and slightly elevated in tone.
+You help customers with: product recommendations, strain information, store hours and locations,
+HighMiles loyalty questions, and current deals. You are NOT a medical professional and never
+give medical advice. Always remind users that cannabis is for adults 21+ only.
+Your responses are concise (2–4 sentences unless asked for more), friendly, and helpful.
+Always end product recommendations with a relevant CTA suggestion.
+Current inventory: [DYNAMIC_INJECTION from Sanity CMS]
+Current deals: [DYNAMIC_INJECTION from Toast POS]
+Store hours: [STATIC_OBJECT]
+```
+
+**Capabilities:**
+- Product Q&A from live inventory
+- Strain recommendations based on mood/effect/experience
+- Deals and specials answers
+- HighMiles tier questions and point calculations
+- Location hours and services
+- Order status (future: Toast API)
+
+**UI:** Floating chat bubble (bottom-right). Opens to 380px panel. Dark theme. Typing indicator (3 animated dots). Timestamps. Suggested chips on open. Full conversation history in session.
+
+### 2. AI Strain Finder (Products page)
+**Input:** Mood selection + experience level
+**API call:** `POST /api/strain-finder` → Claude API with inventory context
+**Output:** Single strain recommendation with explanation
+**Fallback:** Static recommendation map if API unavailable
+
+### 3. HighMiles Path Optimizer
+**Input:** Current tier + monthly spend + visit frequency
+**API call:** `POST /api/loyalty-optimizer` → Claude API
+**Output:** Personalized tip for reaching next tier faster
+**Display:** Typewriter text reveal in result panel
+
+### 4. Weekly Deals Copywriter (Internal Tool — Admin Panel)
+**Input:** Product name + deal details from Toast POS export
+**API call:** `POST /api/generate-deal-copy` → Claude API
+**Output:** Marketing headline + 1-sentence description for each deal
+**Use:** Auto-populates CMS deal cards; editors can edit before publishing
+
+---
+
+## CMS SCHEMA (Sanity.io)
+
+### Products
+```
+{
+  name: string,
+  slug: slug,
+  category: 'flower' | 'preroll' | 'vape' | 'edible' | 'concentrate' | 'drink',
+  strain_type: 'indica' | 'sativa' | 'hybrid' | 'cbd',
+  thc_percentage: number,
+  cbd_percentage: number,
+  terpenes: string[],
+  effects: string[],
+  weights_available: { weight: string, price: number }[],
+  description: text,
+  image: image,
+  is_featured: boolean,
+  is_new: boolean,
+  available_locations: reference[],
+  lab_result_url: url,
+  created_at: datetime
+}
+```
+
+### Weekly Specials
+```
+{
+  title: string,
+  deal_price: string,        // e.g. "10/$25"
+  original_price: string,
+  description: string,
+  products: reference[],
+  active_from: date,
+  active_until: date,
+  display_size: 'large' | 'medium' | 'small',  // for grid layout
+  image: image,
+  location_restriction: reference[] | null      // null = all locations
+}
+```
+
+### Locations
+```
+{
+  name: string,
+  slug: slug,
+  address: { street, city, state, zip },
+  phone: string,
+  email: string,
+  coordinates: { lat, lng },
+  hours: { day: string, open: string, close: string, closed: boolean }[],
+  services: string[],
+  store_images: image[],
+  google_place_id: string,
+  google_review_embed_key: string
+}
+```
+
+---
+
+## RESPONSIVE BREAKPOINTS
+
+```
+Mobile:    < 640px   — Single column. Hamburger nav. Full-width cards. Touch swipe on rails.
+Tablet:    640–1024px — 2-col grids. Nav collapses to icon+logo only. Truncated hero text.
+Desktop:   1024–1440px — Full layout as specified.
+Wide:      > 1440px  — Max content width 1400px, centered. Hero can go edge-to-edge.
+```
+
+---
+
+## PERFORMANCE TARGETS
+
+- **Lighthouse Score:** 90+ on all categories
+- **LCP (Largest Contentful Paint):** < 2.5s
+- **CLS (Cumulative Layout Shift):** < 0.1
+- **FID / INP:** < 200ms
+- **Strategy:**
+  - All product images: WebP via Next.js `<Image>` with lazy loading + blur placeholder
+  - Hero WebM video: preload="none", play after LCP fires
+  - Three.js canvas: loaded async after page paint
+  - Fonts: `font-display: swap`, preconnect to fonts.googleapis.com
+  - Above-the-fold CSS inlined
+  - Toast POS menu data: cached in Sanity with 1-hour revalidation (ISR)
+
+---
+
+## ACCESSIBILITY
+
+- All images: descriptive `alt` text
+- Color contrast: minimum 4.5:1 on all text
+- Focus rings: visible gold outline on all interactive elements
+- Skip-to-content link: visible on focus
+- ARIA labels: all icon buttons, form inputs, modal dialogs
+- Keyboard navigable: full tab order, escape closes modals/drawers
+- Reduced motion: `@media (prefers-reduced-motion: reduce)` disables all non-essential animations
+
+---
+
+## SEO STRUCTURE
+
+### Meta per page:
+```
+Home:      "Sozo Cannabis Michigan | Premium Recreational & Medical Dispensary"
+Products:  "Cannabis Products | Flower, Edibles, Vapes | Sozo Michigan"
+Locations: "Sozo Dispensary Locations | Saginaw, Flint, Muskegon Michigan"
+HighMiles: "HighMiles Loyalty Program | Earn Rewards at Sozo Cannabis"
+About:     "About Sozo | Michigan-Grown Cannabis | Our Story & Values"
+```
+
+### Schema Markup (JSON-LD per page):
+- `LocalBusiness` on each location page (name, address, hours, phone, geo, priceRange)
+- `Product` on each product page (name, description, brand, offers)
+- `FAQPage` on HighMiles page (FAQ accordion items)
+- `WebSite` on homepage (sitelinks searchbox)
+
+### Local SEO priorities:
+- Individual `/locations/saginaw`, `/locations/flint`, `/locations/muskegon` pages
+- H1 tags include city name + "dispensary"
+- Google Business Profile embedded reviews
+- NAP (Name/Address/Phone) consistent across all pages
+
+---
+
+## EXECUTION INSTRUCTIONS FOR AI/DEV
+
+When building this site, follow this order:
+
+1. **Set up global design tokens** — CSS variables, typography scale, spacing system
+2. **Build global components** — Nav, Footer, Age Gate, Toast notifications, AI Chat bubble
+3. **Build page layouts** top to bottom per specification
+4. **Implement animations** — entrance animations, hover states, scroll triggers
+5. **Connect CMS** — Sanity schema → Next.js data fetching
+6. **Integrate AI features** — Chatbot first (most impactful), Strain Finder second, Loyalty Optimizer third
+7. **Performance audit** — Images, fonts, bundle size
+8. **SEO pass** — Meta tags, schema, sitemap
+9. **Accessibility audit** — Contrast, keyboard nav, ARIA
+10. **Mobile QA** — Test every page at 375px, 768px, 1280px
+
+---
+
+*This prompt represents a complete product specification. No ambiguity is intentional.  
+Built for Sozo Cannabis by SkyIQ · skyiq.cloud*
