@@ -140,7 +140,7 @@ export function DealsTicker() {
         <Link href="/products">
           <button
             data-testid="ticker-view-all"
-            className="absolute right-0 top-[7px] h-full px-6 text-xs tracking-[0.15em] uppercase whitespace-nowrap transition-opacity hover:opacity-70"
+            className="absolute right-8 top-[7px] h-full px-6 text-xs tracking-[0.15em] uppercase whitespace-nowrap transition-opacity hover:opacity-70"
             style={{
               background: "var(--bg-moss)",
               borderLeft: "1px solid var(--border-dark)",
