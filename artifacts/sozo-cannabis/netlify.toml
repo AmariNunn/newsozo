@@ -1,6 +1,6 @@
 [build]
   command = "pnpm install --frozen-lockfile && pnpm --filter @workspace/sozo-cannabis run build"
-  publish = "dist"
+  publish = "dist/public"
 
 [[redirects]]
   from = "/*"
