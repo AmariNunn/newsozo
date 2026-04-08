@@ -34,23 +34,25 @@ export function Navigation() {
         data-testid="navigation"
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-400"
         style={{
-          background: scrolled ? "rgba(255,255,255,0.95)" : "transparent",
+          background: scrolled ? "rgba(13,31,23,0.92)" : "transparent",
           backdropFilter: scrolled ? "blur(20px)" : "none",
           borderBottom: scrolled ? "1px solid var(--border-dark)" : "none",
         }}
       >
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 flex items-center justify-between h-20">
+          {/* Logo */}
           <Link href="/" data-testid="nav-logo">
             <div className="flex items-center gap-3 cursor-pointer" onClick={scrollTop}>
               <img
                 src={sozoLogoPath}
                 alt="Sozo Cannabis"
                 className="h-9 w-auto"
-                style={{ filter: "none" }}
+                style={{ filter: "brightness(0) invert(1)" }}
               />
             </div>
           </Link>
 
+          {/* Desktop Nav */}
           <div className="hidden lg:flex items-center gap-10">
             {navLinks.map((link) => (
               <Link
@@ -61,7 +63,7 @@ export function Navigation() {
                 <span
                   className="text-xs tracking-[0.2em] uppercase transition-colors duration-200 cursor-pointer"
                   style={{
-                    color: location === link.href ? "var(--gold)" : "var(--text-primary)",
+                    color: location === link.href ? "var(--gold)" : "var(--text-inverse)",
                     fontFamily: "'DM Sans', sans-serif",
                     fontWeight: 500,
                   }}
@@ -72,11 +74,12 @@ export function Navigation() {
             ))}
           </div>
 
+          {/* Right actions */}
           <div className="hidden lg:flex items-center gap-5">
             <button
               data-testid="nav-search"
               className="transition-opacity hover:opacity-70"
-              style={{ color: "var(--text-primary)" }}
+              style={{ color: "var(--text-inverse)" }}
               onClick={scrollTop}
             >
               <Search size={18} />
@@ -85,7 +88,7 @@ export function Navigation() {
               <button
                 data-testid="nav-location"
                 className="flex items-center gap-1.5 text-xs tracking-[0.15em] uppercase transition-opacity hover:opacity-70"
-                style={{ color: "var(--text-secondary)", fontFamily: "'DM Sans', sans-serif" }}
+                style={{ color: "var(--text-inverse-dim)", fontFamily: "'DM Sans', sans-serif" }}
                 onClick={scrollTop}
               >
                 <MapPin size={14} />
@@ -108,10 +111,11 @@ export function Navigation() {
             </Link>
           </div>
 
+          {/* Mobile hamburger */}
           <button
             data-testid="nav-mobile-toggle"
             className="lg:hidden"
-            style={{ color: "var(--text-primary)" }}
+            style={{ color: "var(--text-inverse)" }}
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
@@ -119,6 +123,7 @@ export function Navigation() {
         </div>
       </nav>
 
+      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -128,7 +133,7 @@ export function Navigation() {
             exit={{ x: "100%" }}
             transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
             className="fixed inset-0 z-40 flex flex-col px-10 py-32"
-            style={{ background: "var(--bg-white)" }}
+            style={{ background: "var(--bg-void)" }}
             data-testid="mobile-menu"
           >
             <div className="flex flex-col gap-10">
@@ -144,7 +149,7 @@ export function Navigation() {
                       className="block text-4xl cursor-pointer hover:opacity-70 transition-opacity"
                       style={{
                         fontFamily: "'Cormorant Garamond', serif",
-                        color: "var(--text-primary)",
+                        color: "var(--text-inverse)",
                         fontWeight: 300,
                       }}
                     >
@@ -156,7 +161,7 @@ export function Navigation() {
             </div>
 
             <div className="mt-auto">
-              <p className="text-xs tracking-[0.2em] uppercase" style={{ color: "var(--text-secondary)" }}>
+              <p className="text-xs tracking-[0.2em] uppercase" style={{ color: "var(--text-inverse-dim)" }}>
                 Michigan's Premier Cannabis · Est. 2019
               </p>
             </div>
