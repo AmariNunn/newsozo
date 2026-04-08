@@ -5,6 +5,7 @@ import { AgeGate } from "@/components/AgeGate";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { CustomCursor } from "@/components/CustomCursor";
+import { SozoAI } from "@/components/SozoAI";
 import Home from "@/pages/Home";
 import Locations from "@/pages/Locations";
 import HighMiles from "@/pages/HighMiles";
@@ -70,6 +71,7 @@ function AppContent() {
         </Switch>
       </main>
       <Footer />
+      <SozoAI />
     </>
   );
 }
