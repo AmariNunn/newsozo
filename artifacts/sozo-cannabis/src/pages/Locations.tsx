@@ -86,11 +86,11 @@ function LocationCard({ loc, index, inView }: { loc: typeof locations[0]; index:
       data-testid={`location-page-card-${loc.id}`}
     >
       {/* Photo */}
-      <div className="relative h-60 overflow-hidden img-hover">
+      <div className="relative h-60 overflow-hidden img-hover" style={{ background: "var(--bg-void)" }}>
         <img
           src={loc.image}
           alt={loc.fullName}
-          className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.04]"
+          className="w-full h-full object-contain object-center transition-transform duration-700"
         />
         <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, transparent 40%, rgba(8,15,11,0.7) 100%)" }} />
 
