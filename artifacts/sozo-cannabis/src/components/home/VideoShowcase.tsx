@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useInView } from "@/components/useInView";
-import { useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const videos = [
   {
@@ -25,16 +25,10 @@ const videos = [
   },
 ];
 
-function VideoCard({ video, index }: { video: typeof videos[0]; index: number }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
+function VideoCard({ video }: { video: typeof videos[0] }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.7, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
-      className="flex-shrink-0 relative overflow-hidden group"
+    <div
+      className="relative overflow-hidden group"
       style={{
         width: "clamp(200px, 22vw, 300px)",
         aspectRatio: "9/16",
@@ -42,7 +36,6 @@ function VideoCard({ video, index }: { video: typeof videos[0]; index: number })
       }}
     >
       <video
-        ref={videoRef}
         src={video.src}
         autoPlay
         muted
@@ -51,16 +44,65 @@ function VideoCard({ video, index }: { video: typeof videos[0]; index: number })
         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
       />
 
+      {/* Live indicator */}
       <div
         className="absolute top-4 right-4 w-1.5 h-1.5 rounded-full opacity-80"
         style={{ background: "var(--green-accent)", animation: "pulse-green 2s infinite" }}
       />
-    </motion.div>
+
+      {/* Label overlay */}
+      <div
+        className="absolute bottom-0 left-0 right-0 px-4 pt-10 pb-4"
+        style={{ background: "linear-gradient(to top, rgba(8,15,11,0.85) 0%, transparent 100%)" }}
+      >
+        <p
+          className="text-[10px] tracking-[0.25em] uppercase mb-0.5"
+          style={{ color: "var(--gold)", fontFamily: "'DM Sans', sans-serif" }}
+        >
+          {video.label}
+        </p>
+        <p
+          className="text-xs"
+          style={{ color: "rgba(245,240,232,0.65)", fontFamily: "'DM Sans', sans-serif" }}
+        >
+          {video.caption}
+        </p>
+      </div>
+    </div>
   );
 }
 
 export function VideoShowcase() {
   const { ref, inView } = useInView(0.1);
+  const [paused, setPaused] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
+  const touchStartX = useRef(0);
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const loopedVideos = [...videos, ...videos];
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    setPaused(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setDragOffset(e.touches[0].clientX - touchStartX.current);
+  };
+
+  const handleTouchEnd = () => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => {
+      resumeTimerRef.current = null;
+      setDragOffset(0);
+      setPaused(false);
+    }, 1200);
+  };
+
+  useEffect(() => () => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+  }, []);
 
   return (
     <section
@@ -109,15 +151,49 @@ export function VideoShowcase() {
             From seed to sale, every product starts in our state-of-the-art Michigan grow facility — and ends in your hands.
           </p>
         </motion.div>
+      </div>
 
-        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
-          {videos.map((video, i) => (
-            <div key={i} className="snap-start">
-              <VideoCard video={video} index={i} />
-            </div>
-          ))}
+      {/* Full-bleed ticker — breaks out of the content container */}
+      <div
+        className="overflow-hidden"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
+        {/* Drag layer */}
+        <div
+          style={{
+            transform: `translateX(${dragOffset}px)`,
+            transition: dragOffset === 0 ? "transform 0.4s ease" : "none",
+          }}
+        >
+          {/* Animation layer — 8 cards × (card_width + 16px gap) — seamless at -50% */}
+          <div
+            className="flex py-2"
+            style={{
+              width: "max-content",
+              animation: "ticker 28s linear infinite",
+              animationPlayState: paused ? "paused" : "running",
+              willChange: "transform",
+            }}
+          >
+            {loopedVideos.map((video, i) => (
+              <div
+                key={i}
+                className="flex-shrink-0"
+                style={{ marginRight: 16 }}
+              >
+                <VideoCard video={video} />
+              </div>
+            ))}
+          </div>
         </div>
+      </div>
 
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
         <motion.div
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
@@ -129,7 +205,7 @@ export function VideoShowcase() {
             className="text-[10px] tracking-[0.25em] uppercase"
             style={{ color: "var(--text-muted)", fontFamily: "'DM Sans', sans-serif" }}
           >
-            Swipe to explore
+            In motion ✦ Touch to pause
           </p>
           <div className="h-px flex-1" style={{ background: "var(--border-dark)" }} />
         </motion.div>
