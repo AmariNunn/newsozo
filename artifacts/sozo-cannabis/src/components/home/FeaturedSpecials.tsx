@@ -244,6 +244,7 @@ function MobileCarousel({ inView }: { inView: boolean }) {
       }}
       onTouchStart={handleInteractionStart}
       onTouchEnd={handleInteractionEnd}
+      onTouchCancel={handleInteractionEnd}
       onMouseDown={handleInteractionStart}
       onMouseUp={handleInteractionEnd}
       onMouseLeave={handleInteractionEnd}
