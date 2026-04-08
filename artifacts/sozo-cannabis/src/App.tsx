@@ -34,6 +34,7 @@ function AppContent() {
   const [ageVerified, setAgeVerified] = useState(() => {
     return localStorage.getItem("sozo-age-verified") === "true";
   });
+  const [, navigate] = useLocation();
 
   useEffect(() => {
     if (ageVerified) {
@@ -42,7 +43,14 @@ function AppContent() {
   }, [ageVerified]);
 
   if (!ageVerified) {
-    return <AgeGate onVerify={() => setAgeVerified(true)} />;
+    return (
+      <AgeGate
+        onVerify={() => {
+          setAgeVerified(true);
+          navigate("/");
+        }}
+      />
+    );
   }
 
   return (
