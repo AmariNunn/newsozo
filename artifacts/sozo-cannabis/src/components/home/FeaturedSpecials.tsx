@@ -156,6 +156,76 @@ function DealCard({ deal, className = "" }: { deal: typeof deals[0]; className?:
   );
 }
 
+function Ticker({ className }: { className?: string }) {
+  const [paused, setPaused] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
+  const touchStartX = useRef(0);
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const loopedDeals = [...deals, ...deals];
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    setPaused(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setDragOffset(e.touches[0].clientX - touchStartX.current);
+  };
+
+  const handleTouchEnd = () => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => {
+      resumeTimerRef.current = null;
+      setDragOffset(0);
+      setPaused(false);
+    }, 1200);
+  };
+
+  useEffect(() => () => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+  }, []);
+
+  return (
+    <div
+      className={`overflow-hidden ${className ?? ""}`}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchEnd}
+    >
+      <div
+        style={{
+          transform: `translateX(${dragOffset}px)`,
+          transition: dragOffset === 0 ? "transform 0.4s ease" : "none",
+        }}
+      >
+        <div
+          className="flex py-4"
+          style={{
+            width: "max-content",
+            animation: "ticker 30s linear infinite",
+            animationPlayState: paused ? "paused" : "running",
+            willChange: "transform",
+          }}
+        >
+          {loopedDeals.map((deal, i) => (
+            <div
+              key={`${deal.id}-${i}`}
+              className="flex-shrink-0"
+              style={{ width: "clamp(240px, 22vw, 360px)", height: 480, marginRight: 16 }}
+            >
+              <DealCard deal={deal} className="h-full" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function MobileCarousel() {
   const [paused, setPaused] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
@@ -273,61 +343,8 @@ export function FeaturedSpecials() {
           </a>
         </motion.div>
 
-        {/* Desktop: asymmetric editorial grid */}
-        <div
-          className="hidden md:grid gap-4"
-          style={{
-            gridTemplateColumns: "repeat(6, 1fr)",
-            gridTemplateRows: "auto",
-          }}
-        >
-          {/* Large card - 3 cols, 2 rows */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            style={{ gridColumn: "1 / 4", gridRow: "1 / 3", minHeight: 480 }}
-            className="card-lift"
-          >
-            <DealCard deal={deals[0]} className="h-full" />
-          </motion.div>
-
-          {/* Tall card - 2 cols, 2 rows */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            style={{ gridColumn: "4 / 6", gridRow: "1 / 3", minHeight: 480 }}
-            className="card-lift"
-          >
-            <DealCard deal={deals[1]} className="h-full" />
-          </motion.div>
-
-          {/* Smaller card - 1 col, 2 rows */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            style={{ gridColumn: "6 / 7", gridRow: "1 / 3", minHeight: 480 }}
-            className="card-lift"
-          >
-            <DealCard deal={deals[2]} className="h-full" />
-          </motion.div>
-
-          {/* Bottom row - 3 cards each 2 cols */}
-          {[deals[3], deals[4], deals[5]].map((deal, i) => (
-            <motion.div
-              key={deal.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.25 + i * 0.07 }}
-              style={{ gridColumn: `${i * 2 + 1} / ${i * 2 + 3}`, gridRow: "3 / 4", minHeight: 280 }}
-              className="card-lift"
-            >
-              <DealCard deal={deal} className="h-full" />
-            </motion.div>
-          ))}
-        </div>
+        {/* Desktop: continuous motion ticker */}
+        <Ticker className="hidden md:block -mx-6 lg:-mx-10" />
 
         {/* Mobile: auto-scrolling carousel */}
         <MobileCarousel />
