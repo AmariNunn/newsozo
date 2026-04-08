@@ -171,19 +171,16 @@ function MobileCarousel({ inView }: { inView: boolean }) {
   }, []);
 
   const startAutoScroll = useCallback(() => {
-    // Enforce single-loop invariant — stop any existing loop first
     stopAutoScroll();
     if (!scrollRef.current || isPausedRef.current) return;
     const el = scrollRef.current;
 
     function step() {
-      // Cancel before re-requesting for deterministic stoppability
       rafRef.current = null;
       if (!el || isPausedRef.current) return;
 
-      el.scrollLeft += 0.7;
+      el.scrollLeft += 0.8;
 
-      // When we've scrolled past the first copy, snap back silently
       const halfWidth = el.scrollWidth / 2;
       if (el.scrollLeft >= halfWidth) {
         el.scrollLeft -= halfWidth;
@@ -206,7 +203,6 @@ function MobileCarousel({ inView }: { inView: boolean }) {
   }, [stopAutoScroll]);
 
   const handleInteractionEnd = useCallback(() => {
-    // Only schedule resume if the user actually initiated a drag (pointer was down)
     if (!isPointerDownRef.current) return;
     isPointerDownRef.current = false;
     if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
@@ -237,7 +233,6 @@ function MobileCarousel({ inView }: { inView: boolean }) {
       ref={scrollRef}
       className="md:hidden hide-scrollbar flex gap-3 overflow-x-auto pb-4 -mx-6 px-6"
       style={{
-        scrollSnapType: "x mandatory",
         WebkitOverflowScrolling: "touch",
         scrollbarWidth: "none",
         msOverflowStyle: "none",
@@ -254,10 +249,8 @@ function MobileCarousel({ inView }: { inView: boolean }) {
           key={`${deal.id}-${i}`}
           className="flex-shrink-0 card-lift"
           style={{
-            width: "72vw",
-            maxWidth: 280,
-            height: 380,
-            scrollSnapAlign: "start",
+            width: "68vw",
+            height: 360,
           }}
         >
           <DealCard deal={deal} className="h-full" />
