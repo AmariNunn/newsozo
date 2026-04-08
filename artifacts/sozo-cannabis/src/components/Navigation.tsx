@@ -24,6 +24,10 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  function scrollTop() {
+    window.dispatchEvent(new Event("sozo-scroll-top"));
+  }
+
   return (
     <>
       <nav
@@ -38,7 +42,7 @@ export function Navigation() {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/" data-testid="nav-logo">
-            <div className="flex items-center gap-3 cursor-pointer">
+            <div className="flex items-center gap-3 cursor-pointer" onClick={scrollTop}>
               <img
                 src={sozoLogoPath}
                 alt="Sozo Cannabis"
@@ -76,6 +80,7 @@ export function Navigation() {
               data-testid="nav-search"
               className="transition-opacity hover:opacity-70"
               style={{ color: "var(--text-inverse)" }}
+              onClick={scrollTop}
             >
               <Search size={18} />
             </button>
@@ -84,6 +89,7 @@ export function Navigation() {
                 data-testid="nav-location"
                 className="flex items-center gap-1.5 text-xs tracking-[0.15em] uppercase transition-opacity hover:opacity-70"
                 style={{ color: "var(--text-inverse-dim)", fontFamily: "'DM Sans', sans-serif" }}
+                onClick={scrollTop}
               >
                 <MapPin size={14} />
                 Find Store
@@ -98,6 +104,7 @@ export function Navigation() {
                   color: "var(--text-primary)",
                   fontFamily: "'DM Sans', sans-serif",
                 }}
+                onClick={scrollTop}
               >
                 Shop Now
               </button>

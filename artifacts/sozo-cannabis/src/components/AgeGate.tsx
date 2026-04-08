@@ -10,11 +10,13 @@ export function AgeGate({ onVerify }: AgeGateProps) {
   const [exiting, setExiting] = useState(false);
 
   function handleEnter() {
+    window.dispatchEvent(new Event("sozo-scroll-top"));
     setExiting(true);
     setTimeout(onVerify, 600);
   }
 
   function handleExit() {
+    window.dispatchEvent(new Event("sozo-scroll-top"));
     window.location.href = "https://google.com";
   }
 
