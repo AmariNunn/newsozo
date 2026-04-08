@@ -63,7 +63,7 @@ export function Navigation() {
                 <span
                   className="text-xs tracking-[0.2em] uppercase transition-colors duration-200 cursor-pointer"
                   style={{
-                    color: location === link.href || scrolled ? "var(--gold)" : "var(--green-accent)",
+                    color: location === link.href || scrolled ? "var(--gold)" : "var(--bg-moss)",
                     fontFamily: "'DM Sans', sans-serif",
                     fontWeight: 500,
                   }}
