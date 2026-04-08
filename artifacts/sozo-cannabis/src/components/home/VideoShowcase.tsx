@@ -51,14 +51,6 @@ function VideoCard({ video, index }: { video: typeof videos[0]; index: number })
         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
       />
 
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(to top, rgba(8,15,11,0.85) 0%, rgba(8,15,11,0.2) 50%, transparent 100%)",
-        }}
-      />
-
       <div className="absolute bottom-0 left-0 right-0 p-6">
         <p
           className="text-[10px] tracking-[0.25em] uppercase mb-1"
