@@ -276,8 +276,10 @@
 }
 .ticker-track {
   display: flex;
+  width: max-content;
   animation: ticker 30s linear infinite;
   white-space: nowrap;
+  will-change: transform;
 }
 .ticker-track:hover { animation-play-state: paused; }
 

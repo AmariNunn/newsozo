@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from "react";
 import { Link } from "wouter";
 
 const deals = [
@@ -11,8 +12,61 @@ const deals = [
   "Pleasantea Drinks 3/$18",
 ];
 
+function DealPill({ deal }: { deal: string }) {
+  return (
+    <span
+      className="inline-flex items-center gap-4 px-5"
+      style={{ fontFamily: "'DM Sans', sans-serif" }}
+    >
+      <span
+        className="text-xs tracking-wide whitespace-nowrap px-3 py-1 rounded-full"
+        style={{
+          background: "rgba(245,240,232,0.08)",
+          color: "var(--text-inverse)",
+        }}
+      >
+        {deal.includes("/") ? (
+          <>
+            <span style={{ color: "var(--gold)", fontWeight: 600 }}>
+              {deal.split(" ")[0]}
+            </span>{" "}
+            {deal.split(" ").slice(1).join(" ")}
+          </>
+        ) : (
+          <span>
+            <span style={{ color: "var(--gold)", fontWeight: 600 }}>{deal.split(" ").slice(0, 2).join(" ")}</span>{" "}
+            {deal.split(" ").slice(2).join(" ")}
+          </span>
+        )}
+      </span>
+      <span style={{ color: "var(--border-gold)" }}>·</span>
+    </span>
+  );
+}
+
 export function DealsTicker() {
   const repeated = [...deals, ...deals];
+  const [mobilePaused, setMobilePaused] = useState(false);
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleTouchStart = () => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    setMobilePaused(true);
+  };
+
+  const handleTouchEnd = () => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => {
+      resumeTimerRef.current = null;
+      setMobilePaused(false);
+    }, 800);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    };
+  }, []);
 
   return (
     <div
@@ -37,49 +91,26 @@ export function DealsTicker() {
             <button
               data-testid="ticker-view-all-mobile"
               className="text-xs tracking-[0.15em] uppercase whitespace-nowrap transition-opacity hover:opacity-70"
-              style={{
-                color: "var(--gold)",
-                fontFamily: "'DM Sans', sans-serif",
-              }}
+              style={{ color: "var(--gold)", fontFamily: "'DM Sans', sans-serif" }}
             >
               View All →
             </button>
           </Link>
-
         </div>
 
-        {/* Bottom row: scrolling track */}
-        <div className="overflow-hidden py-2">
-          <div className="ticker-track flex items-center gap-0">
+        {/* Bottom row: scrolling track — CSS animation, pause on touch */}
+        <div
+          className="overflow-hidden py-2"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          onTouchCancel={handleTouchEnd}
+        >
+          <div
+            className="ticker-track flex items-center gap-0"
+            style={{ animationPlayState: mobilePaused ? "paused" : "running" }}
+          >
             {repeated.map((deal, i) => (
-              <span
-                key={i}
-                className="inline-flex items-center gap-4 px-5"
-                style={{ fontFamily: "'DM Sans', sans-serif" }}
-              >
-                <span
-                  className="text-xs tracking-wide whitespace-nowrap px-3 py-1 rounded-full"
-                  style={{
-                    background: "rgba(245,240,232,0.08)",
-                    color: "var(--text-inverse)",
-                  }}
-                >
-                  {deal.includes("/") ? (
-                    <>
-                      <span style={{ color: "var(--gold)", fontWeight: 600 }}>
-                        {deal.split(" ")[0]}
-                      </span>{" "}
-                      {deal.split(" ").slice(1).join(" ")}
-                    </>
-                  ) : (
-                    <span>
-                      <span style={{ color: "var(--gold)", fontWeight: 600 }}>{deal.split(" ").slice(0, 2).join(" ")}</span>{" "}
-                      {deal.split(" ").slice(2).join(" ")}
-                    </span>
-                  )}
-                </span>
-                <span style={{ color: "var(--border-gold)" }}>·</span>
-              </span>
+              <DealPill key={i} deal={deal} />
             ))}
           </div>
         </div>
@@ -104,34 +135,7 @@ export function DealsTicker() {
         <div className="overflow-hidden ml-36 flex-1">
           <div className="ticker-track flex items-center gap-0">
             {repeated.map((deal, i) => (
-              <span
-                key={i}
-                className="inline-flex items-center gap-4 px-5"
-                style={{ fontFamily: "'DM Sans', sans-serif" }}
-              >
-                <span
-                  className="text-xs tracking-wide whitespace-nowrap px-3 py-1 rounded-full"
-                  style={{
-                    background: "rgba(245,240,232,0.08)",
-                    color: "var(--text-inverse)",
-                  }}
-                >
-                  {deal.includes("/") ? (
-                    <>
-                      <span style={{ color: "var(--gold)", fontWeight: 600 }}>
-                        {deal.split(" ")[0]}
-                      </span>{" "}
-                      {deal.split(" ").slice(1).join(" ")}
-                    </>
-                  ) : (
-                    <span>
-                      <span style={{ color: "var(--gold)", fontWeight: 600 }}>{deal.split(" ").slice(0, 2).join(" ")}</span>{" "}
-                      {deal.split(" ").slice(2).join(" ")}
-                    </span>
-                  )}
-                </span>
-                <span style={{ color: "var(--border-gold)" }}>·</span>
-              </span>
+              <DealPill key={i} deal={deal} />
             ))}
           </div>
         </div>

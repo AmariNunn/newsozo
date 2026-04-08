@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useInView } from "@/components/useInView";
-import { useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import img1 from "@assets/pomelli_bdna_image_0408_(1)_1775664388286.png";
 import img2 from "@assets/pomelli_bdna_image_0408_(2)_1775664388287.png";
 import img3 from "@assets/pomelli_bdna_image_0408_(3)_1775664388287.png";
@@ -156,106 +156,56 @@ function DealCard({ deal, className = "" }: { deal: typeof deals[0]; className?:
   );
 }
 
-function MobileCarousel({ inView }: { inView: boolean }) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number | null>(null);
-  const isPausedRef = useRef(false);
-  const isPointerDownRef = useRef(false);
+function MobileCarousel() {
+  const [paused, setPaused] = useState(false);
   const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const loopedDeals = [...deals, ...deals];
 
-  const stopAutoScroll = useCallback(() => {
-    if (rafRef.current !== null) {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = null;
-    }
-  }, []);
+  const handleTouchStart = () => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    setPaused(true);
+  };
 
-  const startAutoScroll = useCallback(() => {
-    stopAutoScroll();
-    if (!scrollRef.current || isPausedRef.current) return;
-    const el = scrollRef.current;
-
-    function step() {
-      rafRef.current = null;
-      if (!el || isPausedRef.current) return;
-
-      el.scrollLeft += 0.8;
-
-      const halfWidth = el.scrollWidth / 2;
-      if (el.scrollLeft >= halfWidth) {
-        el.scrollLeft -= halfWidth;
-      }
-
-      rafRef.current = requestAnimationFrame(step);
-    }
-
-    rafRef.current = requestAnimationFrame(step);
-  }, [stopAutoScroll]);
-
-  const handleInteractionStart = useCallback(() => {
-    isPointerDownRef.current = true;
-    isPausedRef.current = true;
-    stopAutoScroll();
-    if (resumeTimerRef.current) {
-      clearTimeout(resumeTimerRef.current);
-      resumeTimerRef.current = null;
-    }
-  }, [stopAutoScroll]);
-
-  const handleInteractionEnd = useCallback(() => {
-    if (!isPointerDownRef.current) return;
-    isPointerDownRef.current = false;
+  const handleTouchEnd = () => {
     if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
     resumeTimerRef.current = setTimeout(() => {
       resumeTimerRef.current = null;
-      isPausedRef.current = false;
-      startAutoScroll();
+      setPaused(false);
     }, 1200);
-  }, [startAutoScroll]);
+  };
 
   useEffect(() => {
-    if (!inView) return;
-    isPausedRef.current = false;
-    startAutoScroll();
     return () => {
-      stopAutoScroll();
-      if (resumeTimerRef.current) {
-        clearTimeout(resumeTimerRef.current);
-        resumeTimerRef.current = null;
-      }
+      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
     };
-  }, [inView, startAutoScroll, stopAutoScroll]);
-
-  const loopedDeals = [...deals, ...deals];
+  }, []);
 
   return (
     <div
-      ref={scrollRef}
-      className="md:hidden hide-scrollbar flex gap-3 overflow-x-auto pb-4 -mx-6 px-6"
-      style={{
-        WebkitOverflowScrolling: "touch",
-        scrollbarWidth: "none",
-        msOverflowStyle: "none",
-      }}
-      onTouchStart={handleInteractionStart}
-      onTouchEnd={handleInteractionEnd}
-      onTouchCancel={handleInteractionEnd}
-      onMouseDown={handleInteractionStart}
-      onMouseUp={handleInteractionEnd}
-      onMouseLeave={handleInteractionEnd}
+      className="md:hidden overflow-hidden -mx-6"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchEnd}
     >
-      {loopedDeals.map((deal, i) => (
-        <div
-          key={`${deal.id}-${i}`}
-          className="flex-shrink-0 card-lift"
-          style={{
-            width: "68vw",
-            height: 360,
-          }}
-        >
-          <DealCard deal={deal} className="h-full" />
-        </div>
-      ))}
+      <div
+        className="flex gap-3 py-4 pl-6"
+        style={{
+          width: "max-content",
+          animation: "ticker 25s linear infinite",
+          animationPlayState: paused ? "paused" : "running",
+          willChange: "transform",
+        }}
+      >
+        {loopedDeals.map((deal, i) => (
+          <div
+            key={`${deal.id}-${i}`}
+            className="flex-shrink-0"
+            style={{ width: "68vw", height: 360 }}
+          >
+            <DealCard deal={deal} className="h-full" />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -363,7 +313,7 @@ export function FeaturedSpecials() {
         </div>
 
         {/* Mobile: auto-scrolling carousel */}
-        <MobileCarousel inView={inView} />
+        <MobileCarousel />
       </div>
     </section>
   );
