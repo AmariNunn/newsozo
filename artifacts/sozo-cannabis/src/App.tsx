@@ -10,6 +10,7 @@ import Locations from "@/pages/Locations";
 import HighMiles from "@/pages/HighMiles";
 import Products from "@/pages/Products";
 import About from "@/pages/About";
+import SozoDifference from "@/pages/SozoDifference";
 import NotFound from "@/pages/not-found";
 import { useState, useEffect, useRef } from "react";
 
@@ -56,6 +57,7 @@ function AppContent() {
           <Route path="/highmiles" component={HighMiles} />
           <Route path="/products" component={Products} />
           <Route path="/about" component={About} />
+          <Route path="/difference" component={SozoDifference} />
           <Route component={NotFound} />
         </Switch>
       </main>
