@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useInView } from "@/components/useInView";
+import { useRef, useEffect, useCallback } from "react";
 import img1 from "@assets/pomelli_bdna_image_0408_(1)_1775664388286.png";
 import img2 from "@assets/pomelli_bdna_image_0408_(2)_1775664388287.png";
 import img3 from "@assets/pomelli_bdna_image_0408_(3)_1775664388287.png";
@@ -155,6 +156,99 @@ function DealCard({ deal, className = "" }: { deal: typeof deals[0]; className?:
   );
 }
 
+function MobileCarousel({ inView }: { inView: boolean }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
+  const isPausedRef = useRef(false);
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const startAutoScroll = useCallback(() => {
+    if (!scrollRef.current) return;
+    const el = scrollRef.current;
+
+    function step() {
+      if (!el || isPausedRef.current) return;
+
+      el.scrollLeft += 0.7;
+
+      // When we've scrolled past the first copy, snap back silently
+      const halfWidth = el.scrollWidth / 2;
+      if (el.scrollLeft >= halfWidth) {
+        el.scrollLeft -= halfWidth;
+      }
+
+      rafRef.current = requestAnimationFrame(step);
+    }
+
+    rafRef.current = requestAnimationFrame(step);
+  }, []);
+
+  const stopAutoScroll = useCallback(() => {
+    if (rafRef.current !== null) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
+  }, []);
+
+  const handleInteractionStart = useCallback(() => {
+    isPausedRef.current = true;
+    stopAutoScroll();
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+  }, [stopAutoScroll]);
+
+  const handleInteractionEnd = useCallback(() => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => {
+      isPausedRef.current = false;
+      startAutoScroll();
+    }, 1200);
+  }, [startAutoScroll]);
+
+  useEffect(() => {
+    if (!inView) return;
+    startAutoScroll();
+    return () => {
+      stopAutoScroll();
+      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    };
+  }, [inView, startAutoScroll, stopAutoScroll]);
+
+  const loopedDeals = [...deals, ...deals];
+
+  return (
+    <div
+      ref={scrollRef}
+      className="md:hidden hide-scrollbar flex gap-3 overflow-x-auto pb-4 -mx-6 px-6"
+      style={{
+        scrollSnapType: "x mandatory",
+        WebkitOverflowScrolling: "touch",
+        scrollbarWidth: "none",
+        msOverflowStyle: "none",
+      }}
+      onTouchStart={handleInteractionStart}
+      onTouchEnd={handleInteractionEnd}
+      onMouseDown={handleInteractionStart}
+      onMouseUp={handleInteractionEnd}
+      onMouseLeave={handleInteractionEnd}
+    >
+      {loopedDeals.map((deal, i) => (
+        <div
+          key={`${deal.id}-${i}`}
+          className="flex-shrink-0 card-lift"
+          style={{
+            width: "72vw",
+            maxWidth: 280,
+            height: 380,
+            scrollSnapAlign: "start",
+          }}
+        >
+          <DealCard deal={deal} className="h-full" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function FeaturedSpecials() {
   const { ref, inView } = useInView(0.1);
 
@@ -257,36 +351,8 @@ export function FeaturedSpecials() {
           ))}
         </div>
 
-        {/* Mobile: horizontal snap-scroll carousel */}
-        <div
-          className="md:hidden hide-scrollbar flex gap-3 overflow-x-auto pb-4 -mx-6 px-6"
-          style={{
-            scrollSnapType: "x mandatory",
-            WebkitOverflowScrolling: "touch",
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-          }}
-        >
-          {deals.map((deal, i) => (
-            <motion.div
-              key={deal.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.06 }}
-              className="flex-shrink-0 card-lift"
-              style={{
-                width: "72vw",
-                maxWidth: 280,
-                height: 380,
-                scrollSnapAlign: "start",
-              }}
-            >
-              <DealCard deal={deal} className="h-full" />
-            </motion.div>
-          ))}
-          {/* Trailing spacer so last card doesn't hug the edge */}
-          <div className="flex-shrink-0 w-2" />
-        </div>
+        {/* Mobile: auto-scrolling carousel */}
+        <MobileCarousel inView={inView} />
       </div>
     </section>
   );
